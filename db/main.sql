@@ -8,7 +8,6 @@ create table bms_users (
   is_admin int, # 是否是管理员, 1表示是, 0表示否
   token varchar(60) not null unique, # 用来生成token, 目前系统设计只支持一个账号最多在一个设备上进行登录, 触发了登录的情况下
   create_time datetime,
-  update_time datetime,
   delete_time datetime,
   primary key (user_id)
 );

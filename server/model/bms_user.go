@@ -9,7 +9,6 @@ type BmsUser struct {
 	IsAdmin    int       `json:"isAdmin" gorm:"is_admin"`
 	Token      string    `json:"-" gorm:"token"`
 	CreateTime time.Time `json:"createTime" gorm:"create_time"`
-	UpdateTime time.Time `json:"updateTime" gorm:"update_time"`
 	DeleteTime time.Time `json:"deleteTime" gorm:"delete_time"`
 }
 
@@ -22,8 +21,7 @@ func (b *BmsUser) Insert() error {
 }
 
 func (b *BmsUser) Update() error {
-	b.UpdateTime = time.Now()
-	return DB.Model(b).Select("Email", "Password", "UpdateTime").Updates(b).Error
+	return DB.Model(b).Select("Email", "Password").Updates(b).Error
 }
 
 func (b *BmsUser) Delete() error {
