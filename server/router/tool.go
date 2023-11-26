@@ -54,3 +54,11 @@ func validate(ctx *gin.Context, data interface{}) bool {
 
 	return true
 }
+
+func errok(operationResult error, c *gin.Context) {
+	if operationResult != nil {
+		errRes(c, operationResult)
+	} else {
+		okRes(c, "")
+	}
+}

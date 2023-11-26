@@ -1,6 +1,7 @@
-import { BoolForm } from "buerui"
+import { BoolForm, request } from "buerui"
 import styles from "./index.less"
 import ChooseAndNewGroup from "./chooseAndNewGroup"
+import { history } from "umi"
 
 const Basic = () => {
   const basicFormList = [
@@ -40,12 +41,19 @@ const Basic = () => {
     layout: "vertical",
   }
 
+  const submitHandler = values => {
+    return request("/api/bms/flowBasic/insert", values).then(flowId => {
+      history.replace(`/flowModule/detail/${flowId}`)
+    })
+  }
+
   return (
     <div className={styles.container}>
       <BoolForm
         list={basicFormList}
         extraFormProps={extraFormProps}
         submitBtnText="保存并进入下一步"
+        onSubmit={submitHandler}
       />
     </div>
   )

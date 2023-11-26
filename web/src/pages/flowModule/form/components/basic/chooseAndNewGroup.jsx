@@ -5,7 +5,7 @@ import styles from "./index.less"
 import NewFlowGroup from "@/components/newFlowGroup"
 import { request } from "buerui"
 
-const ChooseAndNewGroup = () => {
+const ChooseAndNewGroup = props => {
   const [showNewModal, setShowNewModal] = useState(false)
   const [reload, setReload] = useState(false)
   const [loadingGroupList, setLoadingGroupList] = useState(true)
@@ -27,6 +27,8 @@ const ChooseAndNewGroup = () => {
           className={styles.selectCls}
           placeholder="请选择分组"
           loading={loadingGroupList}
+          onChange={v => props.onChange(v)}
+          value={props.value}
         >
           {
             groupList.map(groupObj => (

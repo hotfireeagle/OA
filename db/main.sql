@@ -20,3 +20,24 @@ create table flow_group (
   delete_time datetime,
   primary key (id)
 );
+
+# 流程表
+create table flow (
+  id varchar(36) unique,
+  flow_basic_id varchar(36) unique,
+  create_time datetime,
+  delete_time datetime,
+  primary key (id)
+);
+
+create table flow_basic (
+  id varchar(36) unique,
+  flow_name varchar(20) not null unique,
+  group_id int not null,
+  msg_notify_way int not null,
+  msg_notify_title varchar(20) not null,
+  desc varchar(100),
+  create_time datetime,
+  delete_time datetime,
+  primary key (id)
+);
