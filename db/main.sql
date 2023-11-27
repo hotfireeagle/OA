@@ -36,7 +36,7 @@ create table flow_basic (
   group_id int not null,
   msg_notify_way int not null,
   msg_notify_title varchar(20) not null,
-  desc varchar(100),
+  extra_desc varchar(100),
   create_time datetime,
   delete_time datetime,
   primary key (id)

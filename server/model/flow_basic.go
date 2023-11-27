@@ -13,7 +13,7 @@ type FlowBasic struct {
 	GroupId        int            `gorm:"group_id" json:"groupId" binding:"required"`
 	MsgNotifyWay   int            `gorm:"msg_notify_way" json:"msgNotifyWay" binding:"required"`
 	MsgNotifyTitle string         `gorm:"msg_notify_title" json:"msgNotifyTitle" binding:"required"`
-	Desc           string         `gorm:"desc" json:"desc"`
+	Desc           string         `gorm:"column:extra_desc" json:"desc"`
 	CreateTime     time.Time      `gorm:"create_time" json:"createTime"`
 	DeleteTime     gorm.DeletedAt `gorm:"delete_time" json:"deleteTime"`
 }

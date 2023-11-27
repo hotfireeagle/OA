@@ -14,7 +14,7 @@ const Basic = () => {
     {
       label: "所在分组",
       type: "custom",
-      key: "group",
+      key: "groupId",
       render: () => <ChooseAndNewGroup />,
       required: true,
     },
@@ -23,6 +23,10 @@ const Basic = () => {
       type: "select",
       key: "msgNotifyWay",
       required: true,
+      remote: {
+        api: "/api/bms/common/notifyMethodList",
+        method: "get",
+      },
     },
     {
       label: "消息通知标题",
