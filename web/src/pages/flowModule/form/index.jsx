@@ -2,10 +2,14 @@ import styles from "./index.less"
 import { LeftSquareOutlined, FileDoneOutlined, SendOutlined } from "@ant-design/icons"
 import { Button } from "antd"
 import Basic from "./components/basic"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
+import { useParams } from "umi"
+import { request } from "buerui"
 
 const FlowModuleDetail = () => {
+  const { id } = useParams()
   const [activeStep, setActiveStep] = useState(0) // 处于焦点的步骤
+  const [flowDetail, setFlowDetail] = useState({})
 
   const steps = [
     { stepName: "①基础信息", },
@@ -14,7 +18,20 @@ const FlowModuleDetail = () => {
     { stepName: "④扩展设置", }
   ]
 
-  const eleList = useMemo(() => [<Basic />], [])
+  const eleList = useMemo(() => [
+    <Basic basicId={flowDetail?.flowBasicId} />,
+  ], [flowDetail])
+
+  useEffect(() => {
+    if (!id) {
+      // 不是处在详情模式下面
+      return
+    }
+
+    request(`/api/bms/flow/${id}`, {}, "get").then(res => {
+      setFlowDetail(res)
+    })
+  }, [id])
 
   return (
     <div className={styles.pageContainer}>

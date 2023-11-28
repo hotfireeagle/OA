@@ -17,6 +17,10 @@ func InitRoute(g *gin.Engine) {
 
 	flowBasic := bmsGroup.Group("/flowBasic")
 	flowBasic.POST("/insert", insertFlowBasicRoute)
+	flowBasic.GET("/:id", findFlowBasicDetailRoute)
+
+	flow := bmsGroup.Group("/flow")
+	flow.GET("/:id", findFlowDetailRoute)
 
 	commonGroup := bmsGroup.Group("/common")
 	commonGroup.GET("/notifyMethodList", fetchNotifyMethodListRoute)

@@ -3,6 +3,7 @@ package router
 import (
 	"errors"
 	"oa/model"
+	"oa/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,4 +33,21 @@ func updateFlowBasicRoute(c *gin.Context) {
 	}
 
 	errok(flowBasic.Update(), c)
+}
+
+func findFlowBasicDetailRoute(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		errRes(c, util.EmptyIdErr)
+		return
+	}
+
+	basic, err := model.FindFlowBasicDetailById(id)
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+
+	okRes(c, basic)
 }

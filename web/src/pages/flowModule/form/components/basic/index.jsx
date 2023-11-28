@@ -3,7 +3,7 @@ import styles from "./index.less"
 import ChooseAndNewGroup from "./chooseAndNewGroup"
 import { history } from "umi"
 
-const Basic = () => {
+const Basic = props => {
   const basicFormList = [
     {
       label: "表单名称",
@@ -54,6 +54,11 @@ const Basic = () => {
   return (
     <div className={styles.container}>
       <BoolForm
+        detailConfig={{
+          api: `/api/bms/flowBasic/${props.basicId}`,
+          requestMethod: "get",
+          doRequest: !!props.basicId,
+        }}
         list={basicFormList}
         extraFormProps={extraFormProps}
         submitBtnText="保存并进入下一步"
