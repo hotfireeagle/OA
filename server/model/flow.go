@@ -7,10 +7,10 @@ import (
 )
 
 type Flow struct {
-	Id          string         `gorm:"id" json:"id"`
-	FlowBasicId string         `gorm:"flow_basic_id" json:"flowBasicId"`
-	CreateTime  time.Time      `gorm:"create_time" json:"createTime"`
-	DeleteTime  gorm.DeletedAt `gorm:"delete_time" json:"deleteTime"`
+	Id          string         `gorm:"column:id" json:"id"`
+	FlowBasicId string         `gorm:"column:flow_basic_id" json:"flowBasicId"`
+	CreateTime  time.Time      `gorm:"column:create_time" json:"createTime"`
+	DeleteTime  gorm.DeletedAt `gorm:"column:delete_time" json:"deleteTime"`
 }
 
 func (f Flow) TableName() string {

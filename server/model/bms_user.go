@@ -3,13 +3,13 @@ package model
 import "time"
 
 type BmsUser struct {
-	UserId     string    `json:"userId" gorm:"user_id"`
-	Email      string    `json:"email" gorm:"email" binding:"required"`
-	Password   string    `json:"password,omitempty" gorm:"password" binding:"required"`
-	IsAdmin    int       `json:"isAdmin" gorm:"is_admin"`
-	Token      string    `json:"-" gorm:"token"`
-	CreateTime time.Time `json:"createTime" gorm:"create_time"`
-	DeleteTime time.Time `json:"deleteTime" gorm:"delete_time"`
+	UserId     string    `json:"userId" gorm:"column:user_id"`
+	Email      string    `json:"email" gorm:"column:email" binding:"required"`
+	Password   string    `json:"password,omitempty" gorm:"column:password" binding:"required"`
+	IsAdmin    int       `json:"isAdmin" gorm:"column:is_admin"`
+	Token      string    `json:"-" gorm:"column:token"`
+	CreateTime time.Time `json:"createTime" gorm:"column:create_time"`
+	DeleteTime time.Time `json:"deleteTime" gorm:"column:delete_time"`
 }
 
 func (b BmsUser) TableName() string {

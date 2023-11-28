@@ -7,10 +7,10 @@ import (
 )
 
 type FlowGroup struct {
-	Id         int            `json:"id" grom:"id"`
-	GroupName  string         `json:"groupName" grom:"group_name" binding:"required"`
-	CreateTime time.Time      `json:"createTime" gorm:"create_time"`
-	DeleteTime gorm.DeletedAt `json:"deleteTime" gorm:"delete_time"`
+	Id         int            `json:"id" grom:"column:id"`
+	GroupName  string         `json:"groupName" grom:"column:group_name" binding:"required"`
+	CreateTime time.Time      `json:"createTime" gorm:"column:create_time"`
+	DeleteTime gorm.DeletedAt `json:"deleteTime" gorm:"column:delete_time"`
 }
 
 func (f FlowGroup) TableName() string {

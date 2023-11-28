@@ -8,14 +8,14 @@ import (
 )
 
 type FlowBasic struct {
-	Id             string         `gorm:"id" json:"id"`
-	FlowName       string         `gorm:"flow_name" json:"flowName" binding:"required"`
-	GroupId        int            `gorm:"group_id" json:"groupId" binding:"required"`
-	MsgNotifyWay   int            `gorm:"msg_notify_way" json:"msgNotifyWay" binding:"required"`
-	MsgNotifyTitle string         `gorm:"msg_notify_title" json:"msgNotifyTitle" binding:"required"`
+	Id             string         `gorm:"column:id" json:"id"`
+	FlowName       string         `gorm:"column:flow_name" json:"flowName" binding:"required"`
+	GroupId        int            `gorm:"column:group_id" json:"groupId" binding:"required"`
+	MsgNotifyWay   int            `gorm:"column:msg_notify_way" json:"msgNotifyWay" binding:"required"`
+	MsgNotifyTitle string         `gorm:"column:msg_notify_title" json:"msgNotifyTitle" binding:"required"`
 	Desc           string         `gorm:"column:extra_desc" json:"desc"`
-	CreateTime     time.Time      `gorm:"create_time" json:"createTime"`
-	DeleteTime     gorm.DeletedAt `gorm:"delete_time" json:"deleteTime"`
+	CreateTime     time.Time      `gorm:"column:create_time" json:"createTime"`
+	DeleteTime     gorm.DeletedAt `gorm:"column:delete_time" json:"deleteTime"`
 }
 
 func (f FlowBasic) TableName() string {
