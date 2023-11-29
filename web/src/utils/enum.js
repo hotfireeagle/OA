@@ -24,9 +24,27 @@ export const initFlowData = {
   },
   next: {
     id: uuidv4(),
-    nodeType: flowNodeType.begin,
+    nodeType: flowNodeType.condition,
     attr: {
-
+      caseSchema: [
+        {
+          condition: {
+            // 在条件配置数据里面可以是各种条件
+          },
+          next: {
+            id: uuidv4(),
+          },
+        }, // case分支1
+        {
+          condition: {}
+        }, // case分支2
+        {
+          condition: {},
+        }, // 固定认为最后一个case分支就是default分支
+      ]
     },
+    next: {
+
+    }, // 它的next应该是所有case节点有路可走时的最后一个节点的next
   }
 }
