@@ -2,7 +2,7 @@ import {
   ApproveNode,
   BeginNode,
   CcNode,
-  ConditionNode,
+  SwitchNode,
   EndNode,
 } from "@/components/flowCanvas/nodes"
 import { flowNodeType } from "@/utils/enum"
@@ -20,7 +20,7 @@ export const FlowAtom = props => {
     case flowNodeType.cc:
       return <CcNode {...props} />
     case flowNodeType.condition:
-      return <ConditionNode {...props} />
+      return <SwitchNode {...props} />
     case flowNodeType.end:
       return <EndNode {...props} />
     default:
@@ -29,10 +29,10 @@ export const FlowAtom = props => {
   }
 }
 
-export const ChildrenRender = props => {
-  if (props.children) {
+export const NextNode = props => {
+  if (props.next) {
     return null
   }
 
-  return <FlowAtom {...props.children} />
+  return <FlowAtom {...props.next} />
 }

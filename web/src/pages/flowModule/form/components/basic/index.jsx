@@ -3,7 +3,7 @@ import styles from "./index.less"
 import ChooseAndNewGroup from "./chooseAndNewGroup"
 import { history } from "umi"
 
-const Basic = props => {
+export const Basic = props => {
   const basicFormList = [
     {
       label: "表单名称",
@@ -67,5 +67,3 @@ const Basic = props => {
     </div>
   )
 }
-
-export default Basic

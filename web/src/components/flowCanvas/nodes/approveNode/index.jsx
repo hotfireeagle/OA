@@ -1,10 +1,10 @@
-import { ChildrenRender } from "../../atom"
+import { NextNode } from "../../atom"
 
 export const ApproveNode = props => {
   return (
     <div>
 
-      <ChildrenRender {...props} />
+      <NextNode {...props} />
     </div>
   )
 }

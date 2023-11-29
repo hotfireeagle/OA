@@ -1,0 +1,36 @@
+@borderRadius: 5px;
+@padding: 20px;
+.nodeContainer {
+  width: 220px;
+  border-radius: @borderRadius;
+  box-shadow: 0 0 5px 0 #d8d8d8;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  &:hover {
+    box-shadow: 0 0 3px 0 #1989fa;
+  }
+  .nodeHeader {
+    height: 30px;
+    padding: 0 @padding;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 12px;
+    border-top-left-radius: @borderRadius;
+    border-top-right-radius: @borderRadius;
+  }
+  .beginNodeHeader {
+    background: rgb(122, 147, 157);
+  }
+  .nodeBody {
+    height: 60px;
+    background: #fff;
+    border-bottom-left-radius: @borderRadius;
+    border-bottom-right-radius: @borderRadius;
+    display: flex;
+    align-items: center;
+    padding: 0 @padding;
+    font-size: 14px;
+    color: rgb(101, 99, 99);
+  }
+}

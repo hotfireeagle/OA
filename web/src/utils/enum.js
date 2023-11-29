@@ -11,7 +11,7 @@ export const initFlowData = {
   attr: {
 
   },
-  children: {
+  next: {
     nodeType: flowNodeType.end,
   }
 }

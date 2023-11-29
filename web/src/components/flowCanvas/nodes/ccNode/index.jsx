@@ -1,9 +1,9 @@
-import { ChildrenRender } from "../../atom"
+import { NextNode } from "../../atom"
 
 export const CcNode = props => {
   return (
     <div>
-      <ChildrenRender {...props} />
+      <NextNode {...props} />
     </div>
   )
 }

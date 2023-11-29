@@ -1,7 +1,8 @@
 import styles from "./index.less"
 import { LeftSquareOutlined, FileDoneOutlined, SendOutlined } from "@ant-design/icons"
 import { Button } from "antd"
-import Basic from "./components/basic"
+import { Basic } from "./components/basic"
+import { Flow } from "./components/flow"
 import { useState, useMemo, useEffect } from "react"
 import { useParams } from "umi"
 import { request } from "buerui"
@@ -20,6 +21,7 @@ const FlowModuleDetail = () => {
 
   const eleList = useMemo(() => [
     <Basic basicId={flowDetail?.flowBasicId} />,
+    <Flow />,
   ], [flowDetail])
 
   useEffect(() => {
