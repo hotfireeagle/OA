@@ -1,14 +1,13 @@
-import { useState, useEffect } from "react"
-import { initFlowData } from "@/utils/enum"
 import { FlowCanvas } from "@/components/flowCanvas"
 import styles from "./index.less"
+import { useFlowStore } from "./store"
 
 export const Flow = props => {
-  const [flowSchema, setFlowSchema] = useState(initFlowData)
+  const { flowData } = useFlowStore()
 
   return (
     <div className={styles.flowCanvasContainer}>
-      <FlowCanvas schema={flowSchema} />
+      <FlowCanvas schema={flowData} />
     </div>
   )
 }

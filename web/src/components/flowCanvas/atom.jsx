@@ -8,6 +8,8 @@ import {
 import { flowNodeType, flowNodeCn } from "@/utils/enum"
 import styles from "./atom.less"
 import { Tooltip } from "antd"
+import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
+import { v4 as uuidv4 } from "uuid"
 
 export const FlowAtom = props => {
   if (!props) {
@@ -32,16 +34,45 @@ export const FlowAtom = props => {
 }
 
 export const NextNode = props => {
+  const { flowData, updateFlow } = useFlowStore()
+
   if (props.nodeType === flowNodeType.end) {
     return null
   }
 
   const appendNode = newNodeType => {
     const newNext = {
+      id: uuidv4(),
       nodeType: newNodeType,
       attr: {},
     }
-    // TODO:
+
+    // 设计成树形结构会好些
+    // TODO: 后面新增了case节点的话，那么从case节点找数据的方法又会发生变化
+    let newFlowData = { ...flowData }
+    let hit
+    const findFlowData = node => {
+      if (!node) {
+        return
+      }
+      const { id } = node
+      if (id === props.id) {
+        hit = node
+        return
+      }
+      findFlowData(node.next)
+    }
+    findFlowData(newFlowData)
+    if (hit) {
+      if (!hit.next) {
+        hit.next = newNext
+      } else {
+        const oldNext = hit.next
+        newNext.next = oldNext
+        hit.next = newNext
+      }
+    }
+    updateFlow(newFlowData)
   }
 
   const returnNodes = () => {

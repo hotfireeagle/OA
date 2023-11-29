@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid"
+
 export const flowNodeType = {
   begin: 1, // 发起人节点
   condition: 2, // 条件节点
@@ -15,11 +17,13 @@ export const flowNodeCn = {
 }
 
 export const initFlowData = {
+  id: uuidv4(),
   nodeType: flowNodeType.begin,
   attr: {
 
   },
   next: {
+    id: uuidv4(),
     nodeType: flowNodeType.begin,
     attr: {
 
