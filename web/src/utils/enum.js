@@ -6,12 +6,23 @@ export const flowNodeType = {
   end: 999, // 终止节点
 }
 
+export const flowNodeCn = {
+  [flowNodeType.begin]: "发起人",
+  [flowNodeType.condition]: "条件分支",
+  [flowNodeType.approve]: "审批人",
+  [flowNodeType.cc]: "抄送人",
+  [flowNodeType.end]: "结束",
+}
+
 export const initFlowData = {
   nodeType: flowNodeType.begin,
   attr: {
 
   },
   next: {
-    nodeType: flowNodeType.end,
+    nodeType: flowNodeType.begin,
+    attr: {
+
+    },
   }
 }

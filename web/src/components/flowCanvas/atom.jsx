@@ -5,7 +5,9 @@ import {
   SwitchNode,
   EndNode,
 } from "@/components/flowCanvas/nodes"
-import { flowNodeType } from "@/utils/enum"
+import { flowNodeType, flowNodeCn } from "@/utils/enum"
+import styles from "./atom.less"
+import { Tooltip } from "antd"
 
 export const FlowAtom = props => {
   if (!props) {
@@ -30,9 +32,66 @@ export const FlowAtom = props => {
 }
 
 export const NextNode = props => {
-  if (props.next) {
+  if (props.nodeType === flowNodeType.end) {
     return null
   }
 
-  return <FlowAtom {...props.next} />
+  const appendNode = newNodeType => {
+    const newNext = {
+      nodeType: newNodeType,
+      attr: {},
+    }
+    // TODO:
+  }
+
+  const returnNodes = () => {
+    const nodeNameList = Object.keys(flowNodeType)
+
+    return (
+      <div className={styles.addNodeModal}>
+        <div className={styles.titleCls}>添加流程节点</div>
+        <div className={styles.nodeTypeList}>
+          {
+            nodeNameList.map(k => {
+              const nodeType = flowNodeType[k]
+              return (
+                <div
+                  onClick={() => appendNode(nodeType)}
+                  className={styles.node}
+                  key={k}
+                >
+                  <span>{flowNodeCn[nodeType]}</span>
+                </div>
+              )
+            })
+          }
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <div className={styles.newContainer}>
+        <div className={`${styles.line} ${styles.line1}`} />
+        <Tooltip
+          color="#fff"
+          title={returnNodes()}
+          trigger="click"
+          placement="right"
+        >
+          <div className={styles.roundCls}>
+            <span className={styles.plusCls}>+</span>
+          </div>
+        </Tooltip>
+        <div className={`${styles.line} ${styles.line2}`} />
+      </div>
+
+      {
+        props.next ? (
+          <FlowAtom {...props.next} />
+        ) : null
+      }
+    </>
+  )
 }
