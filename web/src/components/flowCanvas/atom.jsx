@@ -5,7 +5,7 @@ import {
   SwitchNode,
   EndNode,
 } from "@/components/flowCanvas/nodes"
-import { flowNodeType, flowNodeCn } from "@/utils/enum"
+import { flowNodeType, flowNodeCn, initCaseSchema } from "@/utils/enum"
 import styles from "./atom.less"
 import { Tooltip } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
@@ -45,6 +45,12 @@ export const NextNode = props => {
       id: uuidv4(),
       nodeType: newNodeType,
       attr: {},
+    }
+
+    if (newNodeType === flowNodeType.condition) {
+      newNext.attr = {
+        caseSchema: [...initCaseSchema],
+      }
     }
 
     // 设计成树形结构会好些

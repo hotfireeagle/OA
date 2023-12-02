@@ -1,5 +1,7 @@
 @borderRadius: 5px;
 @padding: 20px;
+@caseMb: 30px;
+@color: rgb(101, 99, 99);
 .nodeWrapper {
   display: flex;
   flex-direction: column;
@@ -36,7 +38,7 @@
     align-items: center;
     padding: 0 @padding;
     font-size: 14px;
-    color: rgb(101, 99, 99);
+    color: @color;
   }
 }
 .addConditionCls {
@@ -44,10 +46,50 @@
   padding: 10px 20px;
   background: #fff;
   font-size: 14px;
+  color: @color;
   box-shadow: 0 0 5px 0 #d8d8d8;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
+  margin-bottom: @caseMb;
   &:hover {
     box-shadow: 0 0 3px 0 #1989fa;
   }
+}
+.caseListContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  .caseCls {
+    padding: 10px 25px;
+    padding-bottom: 25px;
+    width: 200px;
+    background: #fff;
+    box-shadow: 0 0 5px 0 #d8d8d8;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    border-radius: @borderRadius;
+    &:hover {
+      box-shadow: 0 0 3px 0 #1989fa;
+    }
+  }
+  .caseCls+.caseCls {
+    margin-left: 50px;
+  }
+}
+.caseTitleCls {
+  font-size: 12px;
+  margin-bottom: 15px;
+  color: @color;
+  display: flex;
+  align-items: center;
+  .lineCls {
+    width: 2px;
+    height: 10px;
+    background: #1677ff;
+    margin-right: 4px;
+  }
+}
+.caseValueCls {
+  font-size: 14px;
+  color: @color;
 }
