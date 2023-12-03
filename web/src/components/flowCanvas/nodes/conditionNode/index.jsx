@@ -3,6 +3,7 @@ import styles from "../index.less"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { findTreeNode, appendCaseToSwitchNode } from "@/pages/flowModule/form/components/flow/tool"
 import { CloseSquareOutlined } from "@ant-design/icons"
+import { useState } from "react"
 
 // case应该建模在switchNode的schema里面还是怎么样好？
 
@@ -27,14 +28,12 @@ export const SwitchNode = props => {
         {
           caseList.map((caseObj, idx) => {
             return (
-              <div key={idx} className={styles.caseCls}>
-                <CloseSquareOutlined />
-                <div className={styles.caseTitleCls}>
-                  <div className={styles.lineCls} />
-                  <div>{ idx === caseList.length - 1 ? "默认条件" : `条件${idx+1}` }</div>
-                </div>
-                <div className={styles.caseValueCls}>请设置条件</div>
-              </div>
+              <CaseNode
+                key={idx}
+                idx={idx}
+                isLast={idx === caseList.length - 1}
+                caseSchema={caseObj}
+              />
             )
           })
         }
@@ -45,16 +44,25 @@ export const SwitchNode = props => {
 }
 
 const CaseNode = props => {
-  const { isLast } = props
+  const { isLast, idx, caseSchema } = props
+
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <div key={idx} className={styles.caseCls}>
-      <CloseSquareOutlined />
-      <div className={styles.caseTitleCls}>
-        <div className={styles.lineCls} />
-        <div>{ isLast ? "默认条件" : `条件${idx+1}` }</div>
+    <div className={`${styles.nodeWrapper} ${styles.caseNodeWrapper}`}>
+      <div key={idx} className={styles.caseCls}>
+        {
+          hovered ? (
+            <CloseSquareOutlined />
+          ) : null
+        }
+        <div className={styles.caseTitleCls}>
+          <div className={styles.lineCls} />
+          <div>{ isLast ? "默认条件" : `条件${idx+1}` }</div>
+        </div>
+        <div className={styles.caseValueCls}>请设置条件</div>
       </div>
-      <div className={styles.caseValueCls}>请设置条件</div>
+      <NextNode {...caseSchema} hideArrow={true} />
     </div>
   )
 }

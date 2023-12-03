@@ -37,10 +37,11 @@ export const initFlowData = {
     attr: {
       caseSchema: [
         {
+          // TODO: 要不也加个nodeType?
           id: uuidv4(),
           condition: {
             // 在条件配置数据里面可以是各种条件
-          },
+          }, // TODO:这个要不要改成attr
           next: {
             id: uuidv4(),
           },

@@ -107,9 +107,16 @@ export const NextNode = props => {
     )
   }
 
+  let line2Cls = `${styles.line} ${styles.line2}`
+  let containerStyle = { marginBottom: 3 }
+  if (props.hideArrow) {
+    line2Cls = styles.line
+    containerStyle.marginBottom = 0
+  }
+
   return (
     <>
-      <div className={styles.newContainer}>
+      <div style={containerStyle} className={styles.newContainer}>
         <div className={`${styles.line} ${styles.line1}`} />
         <Tooltip
           color="#fff"
@@ -121,7 +128,7 @@ export const NextNode = props => {
             <span className={styles.plusCls}>+</span>
           </div>
         </Tooltip>
-        <div className={`${styles.line} ${styles.line2}`} />
+        <div className={line2Cls} />
       </div>
 
       {

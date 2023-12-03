@@ -1,6 +1,6 @@
 @borderRadius: 5px;
 @padding: 20px;
-@caseMb: 50px;
+@caseMb: 60px;
 @caseListMb: 30px;
 @color: rgb(101, 99, 99);
 @caseWidth: 200px;
@@ -73,13 +73,13 @@
 .caseListContainer {
   display: flex;
   align-items: center;
-  margin-bottom: @caseListMb;
+  // margin-bottom: @caseListMb;
   position: relative;
   &::before {
     content: "";
     position: absolute;
-    left: calc(@caseWidth / 2);
-    right: calc(@caseWidth / 2);
+    left: calc(calc(@caseWidth / 2) - 1px);
+    right: calc(calc(@caseWidth / 2) - 1px);
     top: calc(calc(-@caseMb / 2) - calc(@lineSize / 2));
     height: @lineSize;
     background: @lineColor;
@@ -87,9 +87,10 @@
   &::after {
     content: "";
     position: absolute;
-    left: calc(@caseWidth / 2);
-    right: calc(@caseWidth / 2);
-    bottom: -@caseListMb;
+    left: calc(calc(@caseWidth / 2) - 1px);
+    right: calc(calc(@caseWidth / 2) - 1px);
+    bottom: 0;
+    // bottom: -@caseListMb;
     height: @lineSize;
     background: @lineColor;
   }
@@ -116,20 +117,21 @@
       top: calc(-@caseMb / 2);
       background: @lineColor;
     }
-    &::after {
-      content: "";
-      position: absolute;
-      width: @lineSize;
-      height: calc(@caseListMb);
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: calc(-@caseListMb);
-      background: @lineColor;
-    }
+    // TODO: 稳定后删除
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   width: @lineSize;
+    //   height: calc(@caseListMb);
+    //   left: 50%;
+    //   transform: translateX(-50%);
+    //   bottom: calc(-@caseListMb);
+    //   background: @lineColor;
+    // }
   }
-  .caseCls+.caseCls {
-    margin-left: 50px;
-  }
+}
+.caseNodeWrapper+.caseNodeWrapper {
+  margin-left: 50px;
 }
 .caseTitleCls {
   font-size: 12px;
