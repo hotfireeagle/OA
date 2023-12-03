@@ -1,7 +1,8 @@
 @newHeight: 90px;
 @newWidth: 32px;
-@lineColor: #ccc;
 @arrowWidth: 6px;
+@lineColor: #ccc;
+@lineSize: 2px;
 .newContainer {
   margin-bottom: 3px;
   width: @newWidth;
@@ -10,7 +11,7 @@
   flex-direction: column;
   align-items: center;
   .line {
-    width: 2px;
+    width: @lineSize;
     flex-grow: 1;
     background: @lineColor;
   }

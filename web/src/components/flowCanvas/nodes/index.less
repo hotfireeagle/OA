@@ -1,7 +1,11 @@
 @borderRadius: 5px;
 @padding: 20px;
-@caseMb: 30px;
+@caseMb: 50px;
 @color: rgb(101, 99, 99);
+@caseWidth: 200px;
+@lineColor: #ccc;
+@lineSize: 2px;
+@caseListMb: 20px;
 .nodeWrapper {
   display: flex;
   flex-direction: column;
@@ -51,25 +55,67 @@
   cursor: pointer;
   transition: all 0.5s ease-in-out;
   margin-bottom: @caseMb;
+  position: relative;
   &:hover {
     box-shadow: 0 0 3px 0 #1989fa;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: @lineSize;
+    height: calc(@caseMb / 2);
+    background: @lineColor;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(-@caseMb / 2);
   }
 }
 .caseListContainer {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: @caseListMb;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    left: calc(@caseWidth / 2);
+    right: calc(@caseWidth / 2);
+    top: calc(calc(-@caseMb / 2) - calc(@lineSize / 2));
+    height: @lineSize;
+    background: @lineColor;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: @lineSize;
+    background: @lineColor;
+    left: 50%;
+    transform: translateX(-50%);
+    height: @caseListMb;
+    bottom: -@caseListMb;
+  }
   .caseCls {
     padding: 10px 25px;
     padding-bottom: 25px;
-    width: 200px;
+    width: @caseWidth;
     background: #fff;
     box-shadow: 0 0 5px 0 #d8d8d8;
     cursor: pointer;
     transition: all 0.5s ease-in-out;
     border-radius: @borderRadius;
+    position: relative;
     &:hover {
       box-shadow: 0 0 3px 0 #1989fa;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      width: @lineSize;
+      height: calc(@caseMb / 2);
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(-@caseMb / 2);
+      background: @lineColor;
     }
   }
   .caseCls+.caseCls {
