@@ -1,11 +1,11 @@
 @borderRadius: 5px;
 @padding: 20px;
 @caseMb: 50px;
+@caseListMb: 30px;
 @color: rgb(101, 99, 99);
 @caseWidth: 200px;
 @lineColor: #ccc;
 @lineSize: 2px;
-@caseListMb: 20px;
 .nodeWrapper {
   display: flex;
   flex-direction: column;
@@ -87,12 +87,11 @@
   &::after {
     content: "";
     position: absolute;
-    width: @lineSize;
-    background: @lineColor;
-    left: 50%;
-    transform: translateX(-50%);
-    height: @caseListMb;
+    left: calc(@caseWidth / 2);
+    right: calc(@caseWidth / 2);
     bottom: -@caseListMb;
+    height: @lineSize;
+    background: @lineColor;
   }
   .caseCls {
     padding: 10px 25px;
@@ -115,6 +114,16 @@
       left: 50%;
       transform: translateX(-50%);
       top: calc(-@caseMb / 2);
+      background: @lineColor;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      width: @lineSize;
+      height: calc(@caseListMb);
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(-@caseListMb);
       background: @lineColor;
     }
   }
