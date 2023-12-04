@@ -3,20 +3,22 @@
 @caseMb: 60px;
 @caseListMb: 30px;
 @color: rgb(101, 99, 99);
-@caseWidth: 200px;
+@caseWidth: 220px;
 @lineColor: #ccc;
 @lineSize: 2px;
+@nodeWidth: 220px;
 .nodeWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .nodeContainer {
-  width: 220px;
+  width: @nodeWidth;
   border-radius: @borderRadius;
   box-shadow: 0 0 5px 0 #d8d8d8;
   cursor: pointer;
   transition: all 0.5s ease-in-out;
+  box-sizing: border-box;
   &:hover {
     box-shadow: 0 0 3px 0 #1989fa;
   }
@@ -72,7 +74,7 @@
 }
 .caseListContainer {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   // margin-bottom: @caseListMb;
   position: relative;
   &::before {

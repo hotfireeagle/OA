@@ -44,6 +44,8 @@ export const initFlowData = {
           }, // TODO:这个要不要改成attr
           next: {
             id: uuidv4(),
+            nodeType: flowNodeType.begin,
+            attr: {},
           },
         }, // case分支1
         {
