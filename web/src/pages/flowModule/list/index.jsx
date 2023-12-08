@@ -1,5 +1,6 @@
 import { SearchList } from "buerui"
-import { Card } from "antd"
+import { Card, Button } from "antd"
+import { history } from "umi"
 import styles from "./index.less"
 
 const flowModuleList = () => {
@@ -18,13 +19,19 @@ const flowModuleList = () => {
     },
   ]
 
+  const newHandler = () => {
+    history.push("/flowModule/new")
+  }
+
   return (
     <Card>
       <SearchList
-        url="TODO:"
+        url="/TODO:"
         tableColumns={tableColumnList}
         searchSchema={searchSchemaList}
-      />
+      >
+        <Button onClick={newHandler} type="primary">新增流程</Button>
+      </SearchList>
     </Card>
   )
 }

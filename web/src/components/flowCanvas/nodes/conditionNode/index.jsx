@@ -63,6 +63,7 @@ const CaseNode = props => {
         <div className={styles.caseValueCls}>请设置条件</div>
       </div>
       <NextNode {...caseSchema} hideArrow={true} />
+      <div className={styles.extraLineCls} />
     </div>
   )
 }

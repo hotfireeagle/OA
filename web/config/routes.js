@@ -1,27 +1,23 @@
 export default [
 	{
-		"path": "/flowModule/detail/:id",
-		"name": "流程详情",
-		"component": "./flowModule/form/index",
-		"hideInMenu": true,
-    "layout": false,
-	},
-	{
 		"path": "/flowModule",
 		"name": "流程管理",
-		"component": "./flowModule/list/index"
+    "component": "./flowModule/list/index",
 	},
-	{
-		"path": "/flowModule/detail/:id",
-		"name": "TODO:详情页面名称",
-		"component": "./flowModule/form/index",
-		"hideInMenu": true
-	},
-	{
-		"path": "/flowModule/list",
-		"name": "TODO:列表页面名称",
-		"component": "./flowModule/list/index"
-	},
+  {
+    "path": "/flowModule/detail/:id",
+    "name": "流程详情",
+    "component": "./flowModule/form/index",
+    "hideInMenu": true,
+    "layout": false,
+  },
+  {
+    "path": "/flowModule/new",
+    "name": "新增流程",
+    "component": "./flowModule/form/index",
+    "hideInMenu": true,
+    "layout": false,
+  },
 	{
 		"path": "/user",
 		"layout": false,

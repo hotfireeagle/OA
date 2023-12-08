@@ -46,6 +46,11 @@ export const initFlowData = {
             id: uuidv4(),
             nodeType: flowNodeType.begin,
             attr: {},
+            next: {
+              id: uuidv4(),
+              nodeType: flowNodeType.begin,
+              attr: {},
+            },
           },
         }, // case分支1
         {

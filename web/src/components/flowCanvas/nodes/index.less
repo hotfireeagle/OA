@@ -74,7 +74,7 @@
 }
 .caseListContainer {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   // margin-bottom: @caseListMb;
   position: relative;
   &::before {
@@ -151,4 +151,9 @@
 .caseValueCls {
   font-size: 14px;
   color: @color;
+}
+.extraLineCls {
+  flex-grow: 1;
+  width: @lineSize;
+  background: @lineColor;
 }

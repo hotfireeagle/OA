@@ -25,11 +25,13 @@ create table flow_group (
 create table flow (
   id varchar(36) unique,
   flow_basic_id varchar(36) unique,
+  flow_rule_id varchar(36),
   create_time datetime,
   delete_time datetime,
   primary key (id)
 );
 
+# flow基本信息表
 create table flow_basic (
   id varchar(36) unique,
   flow_name varchar(20) not null unique,
@@ -39,5 +41,12 @@ create table flow_basic (
   extra_desc varchar(100),
   create_time datetime,
   delete_time datetime,
+  primary key (id)
+);
+
+# flow规则配置表
+create table flow_rule (
+  id varchar(36) unique,
+  rule_data text,
   primary key (id)
 );
