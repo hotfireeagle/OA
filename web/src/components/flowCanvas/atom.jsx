@@ -5,7 +5,7 @@ import {
   SwitchNode,
   EndNode,
 } from "@/components/flowCanvas/nodes"
-import { flowNodeType, flowNodeCn, initCaseSchema } from "@/utils/enum"
+import { flowNodeType, nodes, initCaseSchema } from "@/utils/enum"
 import styles from "./atom.less"
 import { Tooltip } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
@@ -28,7 +28,7 @@ export const FlowAtom = props => {
     case flowNodeType.end:
       return <EndNode {...props} />
     default:
-      console.log("wrong nodeType")
+      console.log("wrong nodeType", props.nodeType)
       return null
   }
 }
@@ -54,11 +54,13 @@ export const NextNode = props => {
     }
 
     // 设计成树形结构会好些
-    // TODO: 后面新增了case节点的话，那么从case节点找数据的方法又会发生变化
     let newFlowData = { ...flowData }
     let hit
     const findFlowData = node => {
       if (!node) {
+        return
+      }
+      if (hit) {
         return
       }
       const { id } = node
@@ -67,6 +69,11 @@ export const NextNode = props => {
         return
       }
       findFlowData(node.next)
+      if (node.nodeType === flowNodeType.condition && node.attr?.caseSchema?.length) {
+        for (const caseNode of node.attr.caseSchema) {
+          findFlowData(caseNode)
+        }
+      }
     }
     findFlowData(newFlowData)
     if (hit) {
@@ -82,22 +89,22 @@ export const NextNode = props => {
   }
 
   const returnNodes = () => {
-    const nodeNameList = Object.keys(flowNodeType)
-
     return (
       <div className={styles.addNodeModal}>
         <div className={styles.titleCls}>添加流程节点</div>
         <div className={styles.nodeTypeList}>
           {
-            nodeNameList.map(k => {
-              const nodeType = flowNodeType[k]
+            nodes.map(nodeObj => {
+              if (!nodeObj.addable) {
+                return null
+              }
               return (
                 <div
-                  onClick={() => appendNode(nodeType)}
+                  onClick={() => appendNode(nodeObj.type)}
                   className={styles.node}
-                  key={k}
+                  key={nodeObj.type}
                 >
-                  <span>{flowNodeCn[nodeType]}</span>
+                  <span>{nodeObj.cn}</span>
                 </div>
               )
             })

@@ -5,16 +5,42 @@ export const flowNodeType = {
   condition: 2, // 条件节点
   approve: 3, // 审批节点
   cc: 4, // 抄送节点
+  caseBranch: 5, // case节点
   end: 999, // 终止节点
 }
 
-export const flowNodeCn = {
-  [flowNodeType.begin]: "发起人",
-  [flowNodeType.condition]: "条件分支",
-  [flowNodeType.approve]: "审批人",
-  [flowNodeType.cc]: "抄送人",
-  [flowNodeType.end]: "结束",
-}
+export const nodes = [
+  {
+    type: flowNodeType.begin,
+    cn: "发起人",
+    addable: true,
+  },
+  {
+    type: flowNodeType.condition,
+    cn: "条件分支",
+    addable: true,
+  },
+  {
+    type: flowNodeType.approve,
+    cn: "审批人",
+    addable: true,
+  },
+  {
+    type: flowNodeType.cc,
+    cn: "抄送人",
+    addable: true,
+  },
+  {
+    type: flowNodeType.caseBranch,
+    cn: "条件分支",
+    addable: false,
+  },
+  {
+    type: flowNodeType.end,
+    cn: "结束",
+    addable: true,
+  },
+]
 
 export const initCaseSchema = [
   {
@@ -37,11 +63,11 @@ export const initFlowData = {
     attr: {
       caseSchema: [
         {
-          // TODO: 要不也加个nodeType?
+          nodeType: flowNodeType.caseBranch,
           id: uuidv4(),
-          condition: {
+          attr: {
             // 在条件配置数据里面可以是各种条件
-          }, // TODO:这个要不要改成attr
+          },
           next: {
             id: uuidv4(),
             nodeType: flowNodeType.begin,
@@ -54,13 +80,11 @@ export const initFlowData = {
           },
         }, // case分支1
         {
+          nodeType: flowNodeType.caseBranch,
           id: uuidv4(),
-          condition: {},
+          attr: {},
         }, // 固定认为最后一个case分支就是default分支
       ], // 所有条件列表，逐个逐个进行判断
-    },
-    next: {
-
-    }, // 这个next是所有case节点有路可走时（没有遇到终止状态）的最后一个节点的next
+    }
   }
 }
