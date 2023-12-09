@@ -146,3 +146,19 @@ export const NextNode = props => {
     </>
   )
 }
+
+export const NodeCommon = props => {
+  return (
+    <div className={styles.nodeWrapper}>
+      <div className={styles.nodeContainer}>
+        <div className={`${styles.nodeHeader} ${styles.beginNodeHeader}`}>
+          <span>{props.title}</span>
+        </div>
+        <div className={styles.nodeBody}>
+          {props.contentRender()}
+        </div>
+      </div>
+      <NextNode {...props} />
+    </div>
+  )
+}

@@ -1,5 +1,5 @@
 import { NextNode } from "../../atom"
-import styles from "../index.less"
+import styles from "../../atom.less"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { findTreeNode, appendCaseToSwitchNode } from "@/pages/flowModule/form/components/flow/tool"
 import { CloseSquareOutlined } from "@ant-design/icons"

@@ -3,6 +3,13 @@
 @arrowWidth: 6px;
 @lineColor: #ccc;
 @lineSize: 2px;
+@borderRadius: 5px;
+@padding: 20px;
+@caseMb: 60px;
+@caseListMb: 30px;
+@color: rgb(101, 99, 99);
+@nodeWidth: 220px;
+
 .newContainer {
   width: @newWidth;
   height: @newHeight;
@@ -71,4 +78,142 @@
       cursor: pointer;
     }
   }
+}
+
+.nodeWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nodeContainer {
+  width: @nodeWidth;
+  border-radius: @borderRadius;
+  box-shadow: 0 0 5px 0 #d8d8d8;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  box-sizing: border-box;
+  &:hover {
+    box-shadow: 0 0 3px 0 #1989fa;
+  }
+  .nodeHeader {
+    height: 30px;
+    padding: 0 @padding;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 12px;
+    border-top-left-radius: @borderRadius;
+    border-top-right-radius: @borderRadius;
+  }
+  .beginNodeHeader {
+    background: rgb(122, 147, 157);
+  }
+  .nodeBody {
+    height: 60px;
+    background: #fff;
+    border-bottom-left-radius: @borderRadius;
+    border-bottom-right-radius: @borderRadius;
+    display: flex;
+    align-items: center;
+    padding: 0 @padding;
+    font-size: 14px;
+    color: @color;
+  }
+}
+.addConditionCls {
+  border-radius: 30px;
+  padding: 10px 20px;
+  background: #fff;
+  font-size: 14px;
+  color: @color;
+  box-shadow: 0 0 5px 0 #d8d8d8;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+  margin-bottom: @caseMb;
+  position: relative;
+  &:hover {
+    box-shadow: 0 0 3px 0 #1989fa;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    width: @lineSize;
+    height: calc(@caseMb / 2);
+    background: @lineColor;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(-@caseMb / 2);
+  }
+}
+.caseListContainer {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  &::before {
+    content: "";
+    position: absolute;
+    left: calc(calc(@nodeWidth / 2) - 1px);
+    right: calc(calc(@nodeWidth / 2) - 1px);
+    top: calc(calc(-@caseMb / 2) - calc(@lineSize / 2));
+    height: @lineSize;
+    background: @lineColor;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    left: calc(calc(@nodeWidth / 2) - 1px);
+    right: calc(calc(@nodeWidth / 2) - 1px);
+    bottom: 0;
+    height: @lineSize;
+    background: @lineColor;
+  }
+  .caseCls {
+    padding: 10px 25px;
+    padding-bottom: 25px;
+    width: @nodeWidth;
+    background: #fff;
+    box-shadow: 0 0 5px 0 #d8d8d8;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    border-radius: @borderRadius;
+    position: relative;
+    &:hover {
+      box-shadow: 0 0 3px 0 #1989fa;
+    }
+    &::before {
+      content: "";
+      position: absolute;
+      width: @lineSize;
+      height: calc(@caseMb / 2);
+      left: 50%;
+      transform: translateX(-50%);
+      top: calc(-@caseMb / 2);
+      background: @lineColor;
+    }
+  }
+}
+.caseNodeWrapper+.caseNodeWrapper {
+  margin-left: 50px;
+}
+.caseTitleCls {
+  font-size: 12px;
+  margin-bottom: 15px;
+  color: @color;
+  display: flex;
+  align-items: center;
+  .lineCls {
+    width: 2px;
+    height: 10px;
+    background: #1677ff;
+    margin-right: 4px;
+  }
+}
+.caseValueCls {
+  font-size: 14px;
+  color: @color;
+}
+.extraLineCls {
+  flex-grow: 1;
+  width: @lineSize;
+  background: @lineColor;
 }
