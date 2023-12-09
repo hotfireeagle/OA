@@ -15,6 +15,8 @@ type Response struct {
 	Data interface{}  `json:"data"`
 }
 
+// FIXME: check and delete under shit
+
 type PaginationQueryData struct {
 	Current  int `json:"current"`
 	PageSize int `json:"pageSize"`

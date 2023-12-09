@@ -148,8 +148,14 @@ export const NextNode = props => {
 }
 
 export const NodeCommon = props => {
+  const clickHandler = () => {
+    if (props.onClick) {
+      props.onClick()
+    }
+  }
+
   return (
-    <div className={styles.nodeWrapper}>
+    <div onClick={clickHandler} className={styles.nodeWrapper}>
       <div className={styles.nodeContainer}>
         <div className={`${styles.nodeHeader} ${styles.beginNodeHeader}`}>
           <span>{props.title}</span>

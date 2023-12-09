@@ -50,3 +50,13 @@ create table flow_rule (
   rule_data text,
   primary key (id)
 );
+
+# 部门表
+create table department (
+  id int auto_increment,
+  name varchar(20) not null,
+  parent_department_id int,
+  create_time datetime,
+  delete_time datetime,
+  primary key (id)
+);
