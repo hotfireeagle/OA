@@ -36,6 +36,9 @@ func updateDepartmentRoute(c *gin.Context) {
 
 func getDepartmentListRoute(c *gin.Context) {
 	query := new(model.DepartmentPaginationQuery)
+	if !validate(c, query) {
+		return
+	}
 
 	list, total, err := model.SelectDepartmentList(query)
 
@@ -49,6 +52,17 @@ func getDepartmentListRoute(c *gin.Context) {
 		PageSize: query.PageSize,
 		Total:    total,
 		List:     list,
+	}
+
+	okRes(c, res)
+}
+
+func getDepartmentTreeRoute(c *gin.Context) {
+	res, err := model.SelectDepartmentTree()
+
+	if err != nil {
+		errRes(c, err)
+		return
 	}
 
 	okRes(c, res)

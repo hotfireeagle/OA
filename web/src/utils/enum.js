@@ -88,3 +88,8 @@ export const initFlowData = {
     }
   }
 }
+
+export const account_status_map = {
+  "TODO:1": "正常",
+  "TODO:2": "被禁用",
+}

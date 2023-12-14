@@ -54,9 +54,37 @@ create table flow_rule (
 # 部门表
 create table department (
   id int auto_increment,
-  name varchar(20) not null,
+  name varchar(20) not null unique,
   parent_department_id int,
   create_time datetime,
   delete_time datetime,
+  primary key (id)
+);
+
+# 账号表
+create table account (
+  id varchar(36),
+  name varchar(6) not null unique,
+  email varchar(30) not null unique,
+  password varchar(50) not null,
+  prev_login_time datetime,
+  create_time datetime,
+  delete_time datetime,
+  primary key (id)
+);
+
+# 账号权限关联表
+create table account_role (
+  id int auto_increment,
+  account_id varchar(36),
+  role_id int,
+  primary key (id)
+);
+
+# 账号部门关联表
+create table account_department (
+  id int auto_increment,
+  account_id varchar(36),
+  department_id int,
   primary key (id)
 );

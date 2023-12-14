@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"oa/util"
 	"time"
 
@@ -10,15 +11,26 @@ import (
 type Department struct {
 	Id                 int            `json:"id" gorm:"column:id"`
 	Name               string         `json:"name" gorm:"column:name" binding:"required"`
-	ParentDepartmentId int            `json:"parentDepartmentId" gorm:"column:parentDepartmentId" binding:"required"`
-	CreateTime         time.Time      `json:"createTime" gorm:"column:createTime"`
-	DeleteTime         gorm.DeletedAt `json:"deleteTime" gorm:"column:deleteTime"`
+	ParentDepartmentId int            `json:"parentDepartmentId" gorm:"column:parent_department_id" binding:"required"`
+	CreateTime         time.Time      `json:"createTime" gorm:"column:create_time"`
+	DeleteTime         gorm.DeletedAt `json:"deleteTime" gorm:"column:delete_time"`
+}
+
+type DepartmentRes struct {
+	Department
+	ParentDepartmentName string `json:"parentDepartmentName" gorm:"column:parent_department_name"`
+}
+
+type DepartmentTreeItem struct {
+	Value    int                   `json:"value"`
+	Title    string                `json:"title"`
+	Children []*DepartmentTreeItem `json:"children"`
 }
 
 type DepartmentPaginationQuery struct {
 	Name     string
-	Current  int
-	PageSize int
+	Current  int `json:"current"`
+	PageSize int `json:"pageSize"`
 }
 
 type DepartmentPaginationResponse struct {
@@ -33,6 +45,17 @@ func (d Department) TableName() string {
 }
 
 func (d *Department) Insert() error {
+	d.CreateTime = time.Now()
+	parentDepartment, err := FindDepartmentById(d.ParentDepartmentId)
+
+	if err != nil {
+		return err
+	}
+
+	if parentDepartment.Id == 0 {
+		return errors.New("不存在该父权限")
+	}
+
 	return DB.Create(d).Error
 }
 
@@ -44,8 +67,8 @@ func (d *Department) Delete() error {
 	return DB.Model(d).Update("DeleteTime", time.Now()).Error
 }
 
-func SelectDepartmentList(queryData *DepartmentPaginationQuery) (*[]Department, int64, error) {
-	answer := new([]Department)
+func SelectDepartmentList(queryData *DepartmentPaginationQuery) (*[]DepartmentRes, int64, error) {
+	answer := new([]DepartmentRes)
 	var total int64
 	var err error
 
@@ -68,10 +91,67 @@ func SelectDepartmentList(queryData *DepartmentPaginationQuery) (*[]Department, 
 		return answer, total, err
 	}
 
-	err = db.Offset(queryData.Current - 1*queryData.PageSize).Limit(queryData.PageSize).Find(answer).Error
+	query := "SELECT d1.id, d1.name, d1.create_time, d1.parent_department_id, d2.name AS parent_department_name FROM department d1 LEFT JOIN department d2 ON d1.parent_department_id = d2.id"
+	err = db.Offset(queryData.Current - 1*queryData.PageSize).Limit(queryData.PageSize).Raw(query).Scan(answer).Error
 	if err != nil {
 		return answer, total, err
 	}
 
 	return answer, total, nil
+}
+
+func FindDepartmentById(id int) (*Department, error) {
+	department := new(Department)
+
+	return department, DB.First(department, id).Error
+}
+
+// 搜索获取部门树数据
+func SelectDepartmentTree() ([]*DepartmentTreeItem, error) {
+	answer := make([]*DepartmentTreeItem, 0)
+
+	// 首先找出根部门，可能不仅仅只有一个
+	roots := new([]Department)
+
+	err := DB.Where("parent_department_id is null").Find(roots).Error
+
+	if err != nil {
+		return answer, err
+	}
+
+	for _, root := range *roots {
+		treeItem, err := departmentRes2DepartmentTreeItem(root) // 给root动态扩展children
+		if err != nil {
+			return answer, err
+		}
+		answer = append(answer, treeItem)
+	}
+
+	return answer, nil
+}
+
+// Department => DepartmentTreeItem
+func departmentRes2DepartmentTreeItem(node Department) (*DepartmentTreeItem, error) {
+	answerNode := &DepartmentTreeItem{
+		Value:    node.Id,
+		Title:    node.Name,
+		Children: make([]*DepartmentTreeItem, 0),
+	}
+
+	departmentChildrenList := new([]Department)
+	err := DB.Where("parent_department_id = ?", node.Id).Find(departmentChildrenList).Error
+
+	if err != nil {
+		return answerNode, err
+	}
+
+	for _, child := range *departmentChildrenList {
+		newChild, err := departmentRes2DepartmentTreeItem(child)
+		if err != nil {
+			return answerNode, err
+		}
+		answerNode.Children = append(answerNode.Children, newChild)
+	}
+
+	return answerNode, nil
 }
