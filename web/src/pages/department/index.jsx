@@ -3,13 +3,15 @@ import {
   ModalForm,
   request,
 } from "buerui"
-import { Card, Button, message } from "antd"
+import { Card, Button, message, Modal } from "antd"
 import { useState } from "react"
+import { departmentFunction } from "@/utils/function"
 
 const departmentList = () => {
   const [modalVisible, setModalVisible] = useState(false) // 弹窗是否可见
   const [activeValue, setActiveValue] = useState({}) // 编辑的那一行数据
   const [reload, setReload] = useState(false) // 重新加载列表数据
+  const departmentTree = departmentFunction.useDepartmentList()
 
   const tableColumnList = [
     {
@@ -28,10 +30,30 @@ const departmentList = () => {
       title: "操作",
       dataIndex: "id",
       render: (v, recordObj) => {
+        const isRoot = !recordObj.parentDepartmentId
+        if (isRoot) {
+          return "-"
+        }
+
+        const deleteHandler = event => {
+          event.preventDefault()
+          Modal.confirm({
+            content: "是否确定删除该部门？删除之后该角色关联的数据权限也会对应被删除。",
+            okText: "确认",
+            cancelText: "取消",
+            onOk: () => {
+              return request(`/api/bms/department/delete/${v}`, {}, "delete").then(() => {
+                message.success("操作成功")
+                setReload(!reload)
+              })
+            }
+          })
+        } 
+
         return (
-          <div>
-            <a href="#">编辑</a>
-            <a href="#">删除</a>
+          <div className="table-operation-btn-container">
+            <a onClick={event => editHandler(event, recordObj)} href="#">编辑</a>
+            <a onClick={deleteHandler} href="#">删除</a>
           </div>
         )
       }
@@ -50,7 +72,7 @@ const departmentList = () => {
     setModalVisible(true)
   }
 
-  const checkIsEditScene = () => activeValue["TODO:唯一ID"]
+  const checkIsEditScene = () => activeValue["id"]
 
   // 返回弹窗标题
   const returnModalTitle = () => {
@@ -66,9 +88,9 @@ const departmentList = () => {
       ...(activeValue || {}),
       ...values,
     }
-    let api = "TODO:新增API"
+    let api = "/api/bms/department/insert"
     if (checkIsEditScene()) {
-      api = "TODO:更新API"
+      api = "/api/bms/department/update"
     }
     return request(api, postData, "post").then(() => {
       message.success("操作成功")
@@ -84,7 +106,8 @@ const departmentList = () => {
   }
 
   // 编辑的时候触发
-  const editHandler = rowObj => {
+  const editHandler = (event, rowObj) => {
+    event.preventDefault()
     setActiveValue(rowObj)
     setModalVisible(true)
   }
@@ -96,12 +119,11 @@ const departmentList = () => {
       type: "input",
       required: true,
     },
-    {
+    departmentFunction.departmentFormListConfigFun({
+      treeData: departmentTree,
       label: "上级部门",
       key: "parentDepartmentId",
-      type: "treeSelect",
-      required: true,
-    }
+    }),
   ]
 
   return (

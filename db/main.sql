@@ -57,7 +57,6 @@ create table department (
   name varchar(20) not null unique,
   parent_department_id int,
   create_time datetime,
-  delete_time datetime,
   primary key (id)
 );
 

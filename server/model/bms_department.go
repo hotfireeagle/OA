@@ -4,16 +4,13 @@ import (
 	"errors"
 	"oa/util"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Department struct {
-	Id                 int            `json:"id" gorm:"column:id"`
-	Name               string         `json:"name" gorm:"column:name" binding:"required"`
-	ParentDepartmentId int            `json:"parentDepartmentId" gorm:"column:parent_department_id" binding:"required"`
-	CreateTime         time.Time      `json:"createTime" gorm:"column:create_time"`
-	DeleteTime         gorm.DeletedAt `json:"deleteTime" gorm:"column:delete_time"`
+	Id                 int       `json:"id" gorm:"column:id"`
+	Name               string    `json:"name" gorm:"column:name" binding:"required"`
+	ParentDepartmentId int       `json:"parentDepartmentId" gorm:"column:parent_department_id" binding:"required"`
+	CreateTime         time.Time `json:"createTime" gorm:"column:create_time"`
 }
 
 type DepartmentRes struct {
@@ -28,9 +25,9 @@ type DepartmentTreeItem struct {
 }
 
 type DepartmentPaginationQuery struct {
-	Name     string
-	Current  int `json:"current"`
-	PageSize int `json:"pageSize"`
+	Name     string `json:"name"`
+	Current  int    `json:"current"`
+	PageSize int    `json:"pageSize"`
 }
 
 type DepartmentPaginationResponse struct {
@@ -63,8 +60,9 @@ func (d *Department) Update() error {
 	return DB.Select("Name", "ParentDepartmentId").Updates(d).Error
 }
 
-func (d *Department) Delete() error {
-	return DB.Model(d).Update("DeleteTime", time.Now()).Error
+func DeleteDepartmentById(id string) error {
+	// FIXME: 不仅仅只是删除部门，可能还需要删子部门、账号之间的关联关系
+	return DB.Where("id = ?", id).Delete(&Department{}).Error
 }
 
 func SelectDepartmentList(queryData *DepartmentPaginationQuery) (*[]DepartmentRes, int64, error) {
@@ -91,8 +89,15 @@ func SelectDepartmentList(queryData *DepartmentPaginationQuery) (*[]DepartmentRe
 		return answer, total, err
 	}
 
+	db = db.Offset((queryData.Current - 1) * queryData.PageSize).Limit(queryData.PageSize)
 	query := "SELECT d1.id, d1.name, d1.create_time, d1.parent_department_id, d2.name AS parent_department_name FROM department d1 LEFT JOIN department d2 ON d1.parent_department_id = d2.id"
-	err = db.Offset(queryData.Current - 1*queryData.PageSize).Limit(queryData.PageSize).Raw(query).Scan(answer).Error
+	if queryData.Name != "" {
+		query += " WHERE d1.name = ?"
+		db = db.Raw(query, queryData.Name)
+	} else {
+		db = db.Raw(query)
+	}
+	err = db.Scan(answer).Error
 	if err != nil {
 		return answer, total, err
 	}

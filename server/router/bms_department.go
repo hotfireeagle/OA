@@ -57,6 +57,17 @@ func getDepartmentListRoute(c *gin.Context) {
 	okRes(c, res)
 }
 
+func deleteDepartmentRoute(c *gin.Context) {
+	id := c.Param("id")
+
+	if id == "" {
+		errRes(c, util.EmptyIdErr)
+		return
+	}
+
+	errok(model.DeleteDepartmentById(id), c)
+}
+
 func getDepartmentTreeRoute(c *gin.Context) {
 	res, err := model.SelectDepartmentTree()
 

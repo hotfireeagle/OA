@@ -27,6 +27,7 @@ func InitRoute(g *gin.Engine) {
 	departmentGroup.POST("/update", updateDepartmentRoute)
 	departmentGroup.POST("/list", getDepartmentListRoute)
 	departmentGroup.GET("/tree", getDepartmentTreeRoute)
+	departmentGroup.DELETE("/:id", deleteDepartmentRoute)
 
 	commonGroup := bmsGroup.Group("/common")
 	commonGroup.GET("/notifyMethodList", fetchNotifyMethodListRoute)
