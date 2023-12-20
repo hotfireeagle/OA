@@ -35,13 +35,20 @@ export default [
       {
         "path": "/permission/role/new",
 				"name": "新增角色",
-				"component": "./role/form"
+				"component": "./role/form",
+        "hideInMenu": true,
       },
       {
         "path": "/permission/role/edit/:id",
 				"name": "编辑角色",
-				"component": "./role/form"
+				"component": "./role/form",
+        "hideInMenu": true,
       },
+      {
+        "path": "/permission/setting",
+        "name": "权限编辑",
+        "component": "./role/permission/index",
+      }
 		]
 	},
 	{
