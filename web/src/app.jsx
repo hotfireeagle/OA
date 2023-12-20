@@ -2,7 +2,8 @@ import { LinkOutlined } from "@ant-design/icons"
 import { SettingDrawer } from "@ant-design/pro-components"
 import { history, Link } from "@umijs/max"
 import defaultSettings from "../config/defaultSettings"
-import React from "react"
+import { ProBreadcrumb } from "@ant-design/pro-components"
+
 const isDev = process.env.NODE_ENV === "development"
 const loginPath = "/user/login"
 
@@ -93,6 +94,9 @@ export const layout = ({ initialState, setInitialState }) => {
       // if (initialState?.loading) return <PageLoading />
       return (
         <>
+          <div className="bool-bread-container">
+            <ProBreadcrumb />
+          </div>
           {children}
           <SettingDrawer
             disableUrlParams

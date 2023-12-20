@@ -26,7 +26,22 @@ export default [
 				"path": "/permission/department",
 				"name": "部门管理列表",
 				"component": "./department/index"
-			}
+			},
+      {
+        "path": "/permission/role",
+				"name": "角色列表",
+				"component": "./role/list"
+      },
+      {
+        "path": "/permission/role/new",
+				"name": "新增角色",
+				"component": "./role/form"
+      },
+      {
+        "path": "/permission/role/edit/:id",
+				"name": "编辑角色",
+				"component": "./role/form"
+      },
 		]
 	},
 	{

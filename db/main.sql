@@ -87,3 +87,19 @@ create table account_department (
   department_id int,
   primary key (id)
 );
+
+# 角色表
+create table role (
+  id int auto_increment,
+  name varchar(15),
+  create_time datetime,
+  primary key (id)
+);
+
+# 权限表
+create table permission (
+  id int auto_increment,
+  parent_id int,
+  remark varchar(15),
+  primary key (id)
+);
