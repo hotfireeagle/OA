@@ -41,7 +41,7 @@ const SameLevel = props => {
   const permissionFormList = [
     {
       label: "备注",
-      key: "remark",
+      key: "name",
       type: "input",
       required: true,
     }
@@ -114,7 +114,7 @@ const SameLevel = props => {
             }
             return (
               <div onClick={() => setActiveIdx(idx)} key={permission.id} className={rowClsName.join(" ")}>
-                <span>{permission.remark}</span>
+                <span>{permission.name}</span>
                 <EditOutlined onClick={() => editHandler(permission)} className={styles.new} />
                 <FileAddOutlined onClick={() => appendToNextLevel(permission)} className={styles.new} />
               </div>

@@ -11,7 +11,8 @@ const departmentList = () => {
   const [modalVisible, setModalVisible] = useState(false) // 弹窗是否可见
   const [activeValue, setActiveValue] = useState({}) // 编辑的那一行数据
   const [reload, setReload] = useState(false) // 重新加载列表数据
-  const departmentTree = departmentFunction.useDepartmentList()
+  const [reloadDepartment, setReloadDepartment] = useState(false) // 是否需要重新加载部门列表
+  const departmentTree = departmentFunction.useDepartmentList(reloadDepartment) // 部门列表数据
 
   const tableColumnList = [
     {
@@ -94,6 +95,7 @@ const departmentList = () => {
     }
     return request(api, postData, "post").then(() => {
       message.success("操作成功")
+      setReloadDepartment(!reloadDepartment)
       setReload(!reload)
       modalCancelHandler()
     })

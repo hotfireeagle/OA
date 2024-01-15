@@ -3,7 +3,7 @@ package model
 type Permission struct {
 	Id       int    `json:"id" gorm:"column:id"`
 	ParentId int    `json:"parentId" gorm:"column:parent_id"`
-	Remark   string `json:"remark" gorm:"column:remark" binding:"required"`
+	Remark   string `json:"name" gorm:"column:remark" binding:"required"`
 }
 
 type PermissionTreeItem struct {

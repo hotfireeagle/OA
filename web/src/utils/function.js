@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 
 export const departmentFunction = {
   // 请求部门列表数据
-  useDepartmentList: function() {
+  useDepartmentList: function(reloadDepartmentList) {
     const [departmentList, setDepartmentList] = useState([]) // 角色列表数据
     
     useEffect(() => {
@@ -11,7 +11,7 @@ export const departmentFunction = {
       request("/api/bms/department/tree", postData, "get").then(res => {
         setDepartmentList(res || [])
       })
-    }, [])
+    }, [reloadDepartmentList])
 
     return departmentList
   },

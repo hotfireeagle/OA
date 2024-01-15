@@ -1,6 +1,6 @@
 import { Card, message } from "antd"
 import { BoolForm, request } from "buerui"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useParams, history } from "umi"
 
 const RoleForm = () => {
@@ -22,6 +22,7 @@ const RoleForm = () => {
       type: "permissionTree",
       required: true,
       list: allPermissionList,
+      valueKey: "id",
     }
   ]
 
@@ -31,6 +32,13 @@ const RoleForm = () => {
       history.back(-1)
     })
   }
+
+  // 加载权限列表数据
+  useEffect(() => {
+    request("/api/bms/permission/tree", {}, "get").then(res => {
+      setAllPermissionList(res || [])
+    })
+  }, [])
 
   return (
     <Card>
