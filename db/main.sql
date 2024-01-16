@@ -12,6 +12,15 @@ create table bms_users (
   primary key (user_id)
 );
 
+# 角色表
+create table role (
+  id int auto_increment, # 角色ID
+  name varchar(15), # 角色名称
+  create_time datetime, # 创建时间
+  create_uid 
+  primary key (id)
+);
+
 # 流程组表
 create table flow_group (
   id int auto_increment,
@@ -48,50 +57,5 @@ create table flow_basic (
 create table flow_rule (
   id varchar(36) unique,
   rule_data text,
-  primary key (id)
-);
-
-# 部门表
-create table department (
-  id int auto_increment,
-  name varchar(20) not null unique,
-  parent_department_id int,
-  create_time datetime,
-  primary key (id)
-);
-
-# 账号表
-create table account (
-  id varchar(36),
-  name varchar(6) not null unique,
-  email varchar(30) not null unique,
-  password varchar(50) not null,
-  prev_login_time datetime,
-  create_time datetime,
-  delete_time datetime,
-  primary key (id)
-);
-
-# 账号权限关联表
-create table account_role (
-  id int auto_increment,
-  account_id varchar(36),
-  role_id int,
-  primary key (id)
-);
-
-# 账号部门关联表
-create table account_department (
-  id int auto_increment,
-  account_id varchar(36),
-  department_id int,
-  primary key (id)
-);
-
-# 角色表
-create table role (
-  id int auto_increment,
-  name varchar(15),
-  create_time datetime,
   primary key (id)
 );
