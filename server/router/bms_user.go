@@ -18,6 +18,7 @@ func insertBmsUserRoute(c *gin.Context) {
 		return
 	}
 
+	userObj.Password = util.Sha256(userObj.Password)
 	err := userObj.Insert()
 	if err != nil {
 		errRes(c, err)
@@ -57,20 +58,12 @@ func bmsUserLoginRoute(c *gin.Context) {
 
 // 利用token获取用户的详情信息
 func fetchUserDetailRoute(c *gin.Context) {
-	// TODO:
-	// token := c.GetHeader("token")
-
-	// if token == "" {
-	// 	errRes(c, errors.New("请先登录"))
-	// 	return
-	// }
-
-	// dbUser, err := model.FindBmsUserByToken(token)
-	// if err != nil {
-	// 	errRes(c, err)
-	// 	return
-	// }
-
-	// dbUser.Password = "" // 重置密码，struct tag中json也配置了omitempty，所以不会返回
-	// okRes(c, dbUser)
+	uid := c.GetString("uid")
+	userDetail, err := model.BmsUser{UserId: uid}.Search()
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+	userDetail.Password = ""
+	okRes(c, userDetail)
 }

@@ -27,7 +27,7 @@ func (b *BmsUser) Delete() error {
 	return DB.Model(b).Update("DeleteTime", time.Now()).Error
 }
 
-func (b *BmsUser) Search() (*BmsUser, error) {
+func (b BmsUser) Search() (*BmsUser, error) {
 	u := new(BmsUser)
-	return u, DB.Where("Email = ?", b.Email).First(u).Error
+	return u, DB.Where("user_id = ?", b.UserId).First(u).Error
 }
