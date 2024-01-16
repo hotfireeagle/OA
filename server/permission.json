@@ -1,0 +1,40 @@
+[
+  {
+    "name": "审批管理",
+    "spec": "menu",
+    "children": [
+      {
+        "name": "审批配置",
+        "spec": "menu",
+        "children": [
+      
+        ]
+      },
+      {
+        "name": "审批列表",
+        "spec": "menu",
+        "children": [
+
+        ]
+      }
+    ]
+  },
+  {
+    "name": "权限管理",
+    "spec": "menu",
+    "children": [
+      {
+        "name": "角色管理列表",
+        "spec": "menu"
+      },
+      {
+        "name": "账号管理列表",
+        "spec": "menu"
+      },
+      {
+        "name": "获取菜单树",
+        "spec": "api"
+      }
+    ]
+  }
+]

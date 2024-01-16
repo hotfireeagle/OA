@@ -30,8 +30,6 @@ func InitRoute(g *gin.Engine) {
 	departmentGroup.DELETE("/:id", deleteDepartmentRoute)
 
 	permissionGroup := bmsGroup.Group("/permission")
-	permissionGroup.POST("/insert", insertPermissionRoute)
-	permissionGroup.POST("/update", updatePermissionRoute)
 	permissionGroup.GET("/tree", getPermissonTree)
 
 	commonGroup := bmsGroup.Group("/common")

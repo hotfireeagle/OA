@@ -95,11 +95,3 @@ create table role (
   create_time datetime,
   primary key (id)
 );
-
-# 权限表
-create table permission (
-  id int auto_increment,
-  parent_id int,
-  remark varchar(15),
-  primary key (id)
-);

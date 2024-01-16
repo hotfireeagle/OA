@@ -44,11 +44,11 @@ export default [
 				"component": "./role/form",
         "hideInMenu": true,
       },
-      {
-        "path": "/permission/setting",
-        "name": "权限编辑",
-        "component": "./role/permission/index",
-      }
+      // {
+      //   "path": "/permission/setting",
+      //   "name": "权限编辑",
+      //   "component": "./role/permission/index",
+      // }
 		]
 	},
 	{
