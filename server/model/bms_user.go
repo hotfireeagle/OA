@@ -7,7 +7,6 @@ type BmsUser struct {
 	Email      string    `json:"email" gorm:"column:email" binding:"required"`
 	Password   string    `json:"password,omitempty" gorm:"column:password" binding:"required"`
 	IsAdmin    int       `json:"isAdmin" gorm:"column:is_admin"`
-	Token      string    `json:"-" gorm:"column:token"`
 	CreateTime time.Time `json:"createTime" gorm:"column:create_time"`
 	DeleteTime time.Time `json:"deleteTime" gorm:"column:delete_time"`
 }
@@ -31,10 +30,4 @@ func (b *BmsUser) Delete() error {
 func (b *BmsUser) Search() (*BmsUser, error) {
 	u := new(BmsUser)
 	return u, DB.Where("Email = ?", b.Email).First(u).Error
-}
-
-// 根据token来查找用户
-func FindBmsUserByToken(tok string) (*BmsUser, error) {
-	u := new(BmsUser)
-	return u, DB.Where("Token = ?", tok).First(u).Error
 }

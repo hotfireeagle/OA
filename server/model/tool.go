@@ -1,5 +1,10 @@
 package model
 
+import (
+	"fmt"
+	"time"
+)
+
 type ResponseCode int
 
 const (
@@ -15,42 +20,17 @@ type Response struct {
 	Data interface{}  `json:"data"`
 }
 
-// FIXME: check and delete under shit
-
-type PaginationQueryData struct {
-	Current  int `json:"current"`
-	PageSize int `json:"pageSize"`
-	Offset   int
-	Limit    int
+type CustomeTime struct {
+	time.Time
 }
 
-type PaginationData struct {
-	Current  int         `json:"current"`
-	PageSize int         `json:"pageSize"`
-	Total    int64       `json:"total"`
-	List     interface{} `json:"list"`
+func (ct CustomeTime) MarshalJSON() ([]byte, error) {
+	formatted := ct.Format("2024-01-16 14:54:34")
+	return []byte(fmt.Sprintf("%s", formatted)), nil
 }
 
-func newPaginationData(c int, ps int, t int64, arr interface{}) *PaginationData {
-	return &PaginationData{
-		Current:  c,
-		PageSize: ps,
-		Total:    t,
-		List:     arr,
-	}
-}
-
-func pageSize(l int) int {
-	if l <= 0 {
-		return 10
-	}
-	return l
-}
-
-func current(c int) int {
-	if c <= 0 {
-		return 1
-	}
-
-	return c
+type BaseColumn struct {
+	CreateTime CustomeTime `json:"createTime" gorm:"column:create_time"`
+	DeleteTime CustomeTime `json:"deleteTime" gorm:"column:delete_time"`
+	CreateUID  string      `json:"_" gorm:"column:create_uid"`
 }

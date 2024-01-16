@@ -3,8 +3,11 @@ package router
 import (
 	"errors"
 	"oa/model"
+	"oa/util"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/hotfireeagle/permissionbus"
 )
 
 func insertBmsUserRoute(c *gin.Context) {
@@ -38,29 +41,36 @@ func bmsUserLoginRoute(c *gin.Context) {
 		return
 	}
 
-	if dbUser.Password != postUser.Password {
+	if !util.Sha256Check(postUser.Password, dbUser.Password) {
 		errRes(c, errors.New("密码错误"))
 		return
 	}
 
-	okRes(c, "")
-}
-
-// 利用token获取用户的详情信息
-func fetchUserDetailRoute(c *gin.Context) {
-	token := c.GetHeader("token")
-
-	if token == "" {
-		errRes(c, errors.New("请先登录"))
-		return
-	}
-
-	dbUser, err := model.FindBmsUserByToken(token)
+	token, err := permissionbus.GenerateToken(dbUser.UserId, time.Now().Add(2*24*time.Hour))
 	if err != nil {
 		errRes(c, err)
 		return
 	}
 
-	dbUser.Password = "" // 重置密码，struct tag中json也配置了omitempty，所以不会返回
-	okRes(c, dbUser)
+	okRes(c, token)
+}
+
+// 利用token获取用户的详情信息
+func fetchUserDetailRoute(c *gin.Context) {
+	// TODO:
+	// token := c.GetHeader("token")
+
+	// if token == "" {
+	// 	errRes(c, errors.New("请先登录"))
+	// 	return
+	// }
+
+	// dbUser, err := model.FindBmsUserByToken(token)
+	// if err != nil {
+	// 	errRes(c, err)
+	// 	return
+	// }
+
+	// dbUser.Password = "" // 重置密码，struct tag中json也配置了omitempty，所以不会返回
+	// okRes(c, dbUser)
 }

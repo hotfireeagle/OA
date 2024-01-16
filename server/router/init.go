@@ -1,10 +1,15 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"oa/middleware"
+
+	"github.com/gin-gonic/gin"
+)
 
 func InitRoute(g *gin.Engine) {
 	gateway := g.Group("/api")
 	bmsGroup := gateway.Group("/bms")
+	bmsGroup.Use(middleware.AuthMiddleware())
 
 	bmsUserModule := bmsGroup.Group("/user")
 	bmsUserModule.POST("/insert", insertBmsUserRoute)

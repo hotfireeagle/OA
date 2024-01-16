@@ -1,25 +1,28 @@
 create database oa character set utf8 collate utf8_general_ci;
 
-# 后台管理系统用户表
 create table bms_users (
-  user_id varchar(36) not null unique,
-  email varchar(50) not null unique,
-  password varchar(130) not null,
-  is_admin int, # 是否是管理员, 1表示是, 0表示否
-  token varchar(60) not null unique, # 用来生成token, 目前系统设计只支持一个账号最多在一个设备上进行登录, 触发了登录的情况下
+  user_id varchar(36) not null unique comment 'uid',
+  email varchar(50) not null unique comment '邮箱',
+  password varchar(130) not null comment 'sha256后密码',
+  is_admin int DEFAULT 0 comment '是否是管理员, 1表示是, 0表示否',
   create_time datetime,
   delete_time datetime,
   primary key (user_id)
-);
+)comment='后台管理系统用户表';
 
-# 角色表
+INSERT INTO bms_users (user_id, email, password, is_admin, create_time)
+VALUES ('b9be768f-5a82-4e7e-a820-cdef7b66ec42', 'hotfireeagle@163.com', '5d45197700ac85cf4a74d660a251d82509306311aa8943da60bb8436d4e040f3', 1, NOW());
+
 create table role (
-  id int auto_increment, # 角色ID
-  name varchar(15), # 角色名称
-  create_time datetime, # 创建时间
-  create_uid 
+  id int auto_increment comment '角色ID',
+  name varchar(15) comment '角色名称',
+  create_time datetime comment '创建时间',
+  delete_time datetime comment '删除时间',
+  create_uid varchar(36) comment '创建者',
+  menus JSON comment '菜单权限',
+  apis JSON comment '接口权限',
   primary key (id)
-);
+)comment='角色表';
 
 # 流程组表
 create table flow_group (

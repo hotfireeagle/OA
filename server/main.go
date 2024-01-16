@@ -12,9 +12,9 @@ import (
 func main() {
 	r := gin.Default()
 
+	permissionbus.SetTokenSecretKey(util.GetEnv("tokenSecretKey"))
 	permissionFilePath := filepath.Join(".", "permission.json")
 	pb, err := permissionbus.Load(permissionFilePath)
-
 	if err != nil {
 		panic(err)
 	}
