@@ -1,6 +1,7 @@
 // generate by chatgpt
 import { useState } from "react"
 import { request, tokenStore } from "buerui"
+import { history } from "@umijs/max"
 import styles from "./index.less"
 
 const LoginForm = () => {
@@ -14,6 +15,7 @@ const LoginForm = () => {
     return request("/user/login", postData).then(res => {
       const token = "Bearer " + res
       tokenStore.set(token)
+      history.push("/")
     })
   }
 

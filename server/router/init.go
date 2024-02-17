@@ -14,7 +14,7 @@ func InitRoute(g *gin.Engine) {
 	bmsUserModule := bmsGroup.Group("/user")
 	bmsUserModule.POST("/insert", insertBmsUserRoute)
 	bmsUserModule.POST("/login", bmsUserLoginRoute)
-	bmsUserModule.GET("/detail", fetchUserDetailRoute)
+	bmsUserModule.POST("/detail", fetchUserDetailRoute)
 
 	flowGroup := bmsGroup.Group("/flowGroup")
 	flowGroup.POST("/insert", insertFlowGroupRoute)

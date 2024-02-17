@@ -42,7 +42,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		uid, err := permissionbus.ParseToken(token)
 		if err != nil {
 			c.JSON(200, model.Response{
-				Code: model.Err,
+				Code: model.NeedLogin,
 				Msg:  err.Error(),
 			})
 			c.Abort()

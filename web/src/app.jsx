@@ -1,33 +1,21 @@
-import { LinkOutlined } from "@ant-design/icons"
 import { SettingDrawer } from "@ant-design/pro-components"
-import { history, Link } from "@umijs/max"
+import { history } from "@umijs/max"
 import defaultSettings from "../config/defaultSettings"
 import { ProBreadcrumb } from "@ant-design/pro-components"
+import { tokenStore, request } from "buerui"
+import { LogoutOutlined } from "@ant-design/icons"
 
-const isDev = process.env.NODE_ENV === "development"
 const loginPath = "/user/login"
-
-// TODO: 代码整理
 
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState() {
   const fetchUserInfo = async () => {
-    return "ok"
-    // try {
-    //   const msg = await queryCurrentUser({
-    //     skipErrorHandler: true,
-    //   })
-    //   return msg.data
-    // } catch (error) {
-    //   history.push(loginPath)
-    // }
-    // return undefined
+    return request("/user/detail")
   }
-  // 如果不是登录页面，执行
   const { location } = history
-  if (location.pathname !== loginPath) {
+  if (!location.pathname.includes(loginPath)) {
     const currentUser = await fetchUserInfo()
     return {
       fetchUserInfo,
@@ -46,22 +34,26 @@ export const layout = ({ initialState, setInitialState }) => {
   return {
     actionsRender: () => [],
     avatarProps: {
-      src: initialState?.currentUser?.avatar,
-      // title: <AvatarName />,
-      title: <p>?</p>,
-      render: (_, avatarChildren) => {
-        return null
-        // return <AvatarDropdown>{avatarChildren}</AvatarDropdown>
+      render: () => {
+        const exitHandler = () => {
+          tokenStore.remove()
+          history.replace("/user/login")
+        }
+
+        return (
+          <div onClick={exitHandler}>
+            <div>{initialState?.currentUser?.email}</div>
+            <div className="logoutContainer">
+              <LogoutOutlined />
+              <div className="exitCnCls">退出登录</div>
+            </div>
+          </div>
+        )
       },
-    },
-    waterMarkProps: {
-      content: initialState?.currentUser?.name,
     },
     footerRender: () => null,
     onPageChange: () => {
-      const { location } = history
-      // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!tokenStore.get() && location.pathname !== loginPath) {
         history.push(loginPath)
       }
     },
@@ -114,12 +106,4 @@ export const layout = ({ initialState, setInitialState }) => {
     },
     ...initialState?.settings,
   }
-}
-
-/**
- * @name request 配置，可以配置错误处理
- * 它基于 axios 和 ahooks 的 useRequest 提供了一套统一的网络请求和错误处理方案。
- * @doc https://umijs.org/docs/max/request#配置
- */
-export const request = {
 }
