@@ -8,6 +8,6 @@ import (
 
 // 获取permission树
 func getPermissonTree(c *gin.Context) {
-	menus := util.PermissionBus.GetMenuTree()
+	menus := util.PermissionBus.GetApiTree()
 	okRes(c, menus)
 }

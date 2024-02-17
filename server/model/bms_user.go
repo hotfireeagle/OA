@@ -31,3 +31,8 @@ func (b BmsUser) Search() (*BmsUser, error) {
 	u := new(BmsUser)
 	return u, DB.Where("user_id = ?", b.UserId).First(u).Error
 }
+
+func (b BmsUser) SearchByEmail() (*BmsUser, error) {
+	u := new(BmsUser)
+	return u, DB.Where("email = ?", b.Email).First(u).Error
+}

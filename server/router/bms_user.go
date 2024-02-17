@@ -36,7 +36,7 @@ func bmsUserLoginRoute(c *gin.Context) {
 	}
 
 	// 根据用户邮箱查找数据库用户
-	dbUser, err := postUser.Search()
+	dbUser, err := postUser.SearchByEmail()
 	if err != nil {
 		errRes(c, err)
 		return

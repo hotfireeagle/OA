@@ -4,7 +4,10 @@ import { history } from "@umijs/max"
 
 export default {
   systemName: "flow-system",
-  apiTokenKey: "token", // 请求头中的token名称
+  apiTokenKey: "Authorization", // 请求头中的token名称
+  extraAxiosCreateInstanceConfig: {
+    baseURL: "/api/bms",
+  },
   listApiPageSizeKey: "pageSize",
   responseInterceptor: (response) => {
     const responseType = response?.headers?.["content-type"]
@@ -16,7 +19,7 @@ export default {
 
     let res = response.data // 接口返回的最外层响应体
 
-    const { code, message, data } = res
+    const { code, msg, data } = res
 
     // 一些需要重新进行登录的code
     const needLoginCode = [
@@ -27,7 +30,7 @@ export default {
       const loginRoute = "/user/login"
 
       if (!window.location.pathname.includes(loginRoute)) {
-        antdMessage.error(message || "登录失败！请重新登录")
+        antdMessage.error(msg || "登录失败！请重新登录")
         history.replace(loginRoute)
         tokenStore.remove()
       }
@@ -37,7 +40,7 @@ export default {
     const successCode = 1 // 成功的code
 
     if (code != successCode) {
-      antdMessage.error(message || "系统出现错误");
+      antdMessage.error(msg || "系统出现错误");
       return Promise.reject(code)
     } else {
       return data
