@@ -1,10 +1,18 @@
 import { Card, Button } from "antd"
-import { SearchList } from "buerui"
+import { SearchList, ModalForm, request } from "buerui"
 import { history } from "umi"
+import { useState } from "react"
 
 const Role = () => {
+  const [showNewModal, setShowNewModal] = useState(false)
+  const [activeRole, setActiveRole] = useState({})
+
   const clickNewRole = () => {
-    history.push("/permission/role/new")
+    setShowNewModal(true)
+  }
+
+  const newRoleHandler = data => {
+    return request("/role/insert", data)
   }
 
   const tableColumnList = [
@@ -37,16 +45,33 @@ const Role = () => {
     }
   ]
 
+  const createRoleFormList = [
+    {
+      label: "角色名称",
+      key: "name",
+      type: "input",
+      required: true,
+    }
+  ]
+
   return (
     <Card>
       <SearchList
-        url="/TODO:"
+        url="/role/list"
         tableColumns={tableColumnList}
         searchSchema={searchSchemaList}
         useCache={true}
       >
         <Button onClick={clickNewRole} type="primary">新增角色</Button>
       </SearchList>
+      <ModalForm
+        visible={showNewModal}
+        title="新增角色"
+        formList={createRoleFormList}
+        initValue={activeRole}
+        onOk={newRoleHandler}
+        onCancel={() => setShowNewModal(false)}
+      />
     </Card>
   )
 }

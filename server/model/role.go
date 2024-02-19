@@ -1,5 +1,10 @@
 package model
 
+type RoleListSearchParam struct {
+	Name string `json:"name"`
+	PaginationParam
+}
+
 type Role struct {
 	Id   int    `json:"id" gorm:"column:id"`
 	Name string `json:"name" gorm:"column:name" binding:"required"`
@@ -7,20 +12,6 @@ type Role struct {
 	Menus []string `json:"menus" gorm:"column:menus;type:json" sql:"type:json"`
 	Apis  []string `json:"apis" gorm:"column:apis;type:json" sql:"type:json"`
 }
-
-// func (r *Role) Stringify() error {
-// 	jsonstr, err := json.Marshal(r.Menus)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	r.Menus = string(jsonstr)
-// 	apiStr, err := json.Marshal(r.Apis)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	r.Apis = string(apiStr)
-// 	return err
-// }
 
 func (r Role) TableName() string {
 	return "role"
@@ -34,6 +25,14 @@ func (r *Role) Update() {
 
 }
 
-func (r Role) Pagination() {
+func (p *RoleListSearchParam) Pagination() (*[]Role, error) {
+	roleList := new([]Role)
 
+	query := DB.Model(&Role{})
+	if p.Name != "" {
+		query = query.Where("name = ?", p.Name)
+	}
+
+	query = query.Limit(p.PageSize).Offset(p.Current - 1*p.PageSize).Find(roleList)
+	return roleList, query.Error
 }

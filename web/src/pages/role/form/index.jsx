@@ -35,13 +35,13 @@ const RoleForm = () => {
 
   // 加载权限列表数据
   useEffect(() => {
-    request("/api/bms/permission/tree", {}, "get").then(res => {
+    request("/permission/tree", {}, "get").then(res => {
       setAllPermissionList(res || [])
     })
   }, [])
 
   return (
-    <Card>
+    <Card title="功能配置">
       <BoolForm
         detailConfig={{
           api: "/TODO:",

@@ -1,7 +1,9 @@
 package model
 
 import (
+	"database/sql/driver"
 	"encoding/json"
+	"errors"
 	"time"
 )
 
@@ -20,41 +22,89 @@ type Response struct {
 	Data interface{}  `json:"data"`
 }
 
+type CustomTime struct {
+	time.Time
+}
+
+func (c CustomTime) MarshalJSON() ([]byte, error) {
+	if c.IsZero() {
+		return []byte("null"), nil
+	}
+
+	formatted := c.Format("2024-02-19 23:02:25")
+	return json.Marshal(formatted)
+}
+
+func (ct CustomTime) Value() (driver.Value, error) {
+	if ct.IsZero() {
+		return nil, nil
+	}
+	return ct.Time, nil
+}
+
+func (ct *CustomTime) Scan(value interface{}) error {
+	if value == nil {
+		ct.Time = time.Time{}
+		return nil
+	}
+	t, ok := value.(time.Time)
+	if !ok {
+		return errors.New("failed to scan CustomTime field")
+	}
+	ct.Time = t
+	return nil
+}
+
 type BaseColumn struct {
-	CreateTime time.Time  `json:"createTime" gorm:"column:create_time"`
-	DeleteTime *time.Time `json:"deleteTime" gorm:"column:delete_time"`
-	CreateUID  string     `json:"_" gorm:"column:create_uid"`
+	CreateTime CustomTime `json:"createTime" gorm:"column:create_time"`
+	DeleteTime CustomTime `json:"deleteTime" gorm:"column:delete_time"`
+	CreateUID  string     `json:"-" gorm:"column:create_uid"`
 }
 type Alias BaseColumn
 
 func (b *BaseColumn) SetCreateTime() {
-	b.CreateTime = time.Now()
+	b.CreateTime = CustomTime{
+		Time: time.Now(),
+	}
 }
 
 func (b *BaseColumn) SetDeleteTime() {
-	now := time.Now()
-	b.DeleteTime = &now
+	b.DeleteTime = CustomTime{
+		Time: time.Now(),
+	}
 }
 
 func (b *BaseColumn) SetCreateUID(uid string) {
 	b.CreateUID = uid
 }
 
-func formatTime(t *time.Time) string {
-	if t == nil {
-		return ""
-	}
-	return t.Format("2006-01-02 15:04:05")
+type PaginationParam struct {
+	Current  int `json:"current"`
+	PageSize int `json:"pageSize"`
 }
 
-func (b *BaseColumn) MarshalJSON() ([]byte, error) {
-	return json.Marshal(&struct {
-		CreateTime string `json:"createTime"`
-		DeleteTime string `json:"deleteTime,omitempty"`
-		*Alias
-	}{
-		CreateTime: formatTime(&b.CreateTime),
-		DeleteTime: formatTime(b.DeleteTime),
-		Alias:      (*Alias)(b),
-	})
+// TODO: any better expression?
+func (p *PaginationParam) UnmarshalJSON(data []byte) error {
+	type Alias PaginationParam
+	alias := &Alias{
+		Current:  p.Current,
+		PageSize: p.PageSize,
+	}
+
+	if err := json.Unmarshal(data, alias); err != nil {
+		return err
+	}
+
+	if alias.Current == 0 {
+		alias.Current = 1
+	}
+
+	if alias.PageSize == 0 {
+		alias.PageSize = 10
+	}
+
+	p.Current = alias.Current
+	p.PageSize = alias.PageSize
+
+	return nil
 }

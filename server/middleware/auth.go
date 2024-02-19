@@ -21,7 +21,7 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		if authorizationHeader == "" {
 			c.JSON(200, model.Response{
-				Code: model.UnAuth,
+				Code: model.NeedLogin,
 				Msg:  "不存在Authorization",
 			})
 			c.Abort()

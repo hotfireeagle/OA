@@ -3,6 +3,7 @@ import { request, ModalForm } from "buerui"
 import { useState, useEffect, useRef } from "react"
 import { FileAddOutlined, EditOutlined } from "@ant-design/icons"
 import styles from "./index.less"
+// FIXME: delete
 
 const PermissionSetting = () => {
   const [permissionTree, setPermissionTree] = useState([])
