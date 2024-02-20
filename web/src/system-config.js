@@ -8,6 +8,7 @@ export default {
   extraAxiosCreateInstanceConfig: {
     baseURL: "/api/bms",
   },
+  listApiPageKey: "current",
   listApiPageSizeKey: "pageSize",
   responseInterceptor: (response) => {
     const responseType = response?.headers?.["content-type"]

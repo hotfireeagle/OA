@@ -9,7 +9,7 @@ const Settings = {
   fixedHeader: true,
   fixSiderbar: true,
   colorWeak: false,
-  title: "OA系统",
+  title: "xx系统",
   pwa: true,
   logo: "https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg",
   iconfontUrl: "",

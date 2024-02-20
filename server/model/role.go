@@ -21,8 +21,8 @@ func (r *Role) Insert() error {
 	return DB.Create(r).Error
 }
 
-func (r *Role) Update() {
-
+func (r *Role) UpdateName() error {
+	return DB.Model(r).Update("name", r.Name).Error
 }
 
 func (p *RoleListSearchParam) Pagination() (*[]Role, error) {

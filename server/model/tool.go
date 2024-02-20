@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql/driver"
-	"encoding/json"
 	"errors"
 	"time"
 )
@@ -30,9 +29,24 @@ func (c CustomTime) MarshalJSON() ([]byte, error) {
 	if c.IsZero() {
 		return []byte("null"), nil
 	}
+	return []byte(`"` + c.Format("2006-01-02 15:04:05") + `"`), nil
+}
 
-	formatted := c.Format("2024-02-19 23:02:25")
-	return json.Marshal(formatted)
+func (c *CustomTime) UnmarshalJSON(b []byte) error {
+	timeStr := string(b)
+	if timeStr == "null" {
+		c.Time = time.Time{}
+		return nil
+	}
+
+	layout := "2006-01-02 15:04:05"
+	timeStr = timeStr[1 : len(timeStr)-1]
+	parsedTime, err := time.Parse(layout, timeStr)
+	if err != nil {
+		return err
+	}
+	c.Time = parsedTime
+	return nil
 }
 
 func (ct CustomTime) Value() (driver.Value, error) {
@@ -78,33 +92,8 @@ func (b *BaseColumn) SetCreateUID(uid string) {
 	b.CreateUID = uid
 }
 
+// TODO: 再对PaginationParam进行反序列化时，新增一下对Current和PageSize的默认值处理？
 type PaginationParam struct {
 	Current  int `json:"current"`
 	PageSize int `json:"pageSize"`
-}
-
-// TODO: any better expression?
-func (p *PaginationParam) UnmarshalJSON(data []byte) error {
-	type Alias PaginationParam
-	alias := &Alias{
-		Current:  p.Current,
-		PageSize: p.PageSize,
-	}
-
-	if err := json.Unmarshal(data, alias); err != nil {
-		return err
-	}
-
-	if alias.Current == 0 {
-		alias.Current = 1
-	}
-
-	if alias.PageSize == 0 {
-		alias.PageSize = 10
-	}
-
-	p.Current = alias.Current
-	p.PageSize = alias.PageSize
-
-	return nil
 }

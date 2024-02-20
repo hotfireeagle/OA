@@ -36,3 +36,14 @@ func fetchRoleListRoute(c *gin.Context) {
 
 	okRes(c, roleListRes)
 }
+
+// 更新角色名称
+func updateRoleNameRoute(c *gin.Context) {
+	role := new(model.Role)
+
+	if !validate(c, role) {
+		return
+	}
+
+	errok(role.UpdateName(), c)
+}
