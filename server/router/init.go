@@ -28,12 +28,15 @@ func InitRoute(g *gin.Engine) {
 	flow.GET("/:id", findFlowDetailRoute)
 
 	permissionGroup := bmsGroup.Group("/permission")
-	permissionGroup.GET("/tree", getPermissonTree)
+	permissionGroup.POST("/apiTree", getPermissonTree)
+	permissionGroup.POST("/menuTree", fetchMenuTreeRoute)
 
 	roleGroup := bmsGroup.Group("/role")
 	roleGroup.POST("/insert", insertRoleRoute)
 	roleGroup.POST("/list", fetchRoleListRoute)
 	roleGroup.POST("/updateName", updateRoleNameRoute)
+	roleGroup.POST("/detail/:id", fetchRoleDetailRoute)
+	roleGroup.POST("/update/api", updateRoleApi)
 
 	commonGroup := bmsGroup.Group("/common")
 	commonGroup.GET("/notifyMethodList", fetchNotifyMethodListRoute)

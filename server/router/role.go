@@ -1,7 +1,9 @@
 package router
 
 import (
+	"errors"
 	"oa/model"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,4 +48,31 @@ func updateRoleNameRoute(c *gin.Context) {
 	}
 
 	errok(role.UpdateName(), c)
+}
+
+// 获取角色详情
+func fetchRoleDetailRoute(c *gin.Context) {
+	roleId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		errRes(c, errors.New("ID不合法"))
+		return
+	}
+
+	role := &model.Role{Id: roleId}
+	detail, err := role.Detail() // 查询角色详情数据
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+
+	okRes(c, detail)
+}
+
+func updateRoleApi(c *gin.Context) {
+	roleDetail := new(model.RoleDetail)
+	if !validate(c, roleDetail) {
+		return
+	}
+
+	errok(roleDetail.UpateApis(), c)
 }

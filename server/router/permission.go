@@ -6,8 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 获取permission树
+// 获取api树
 func getPermissonTree(c *gin.Context) {
-	menus := util.PermissionBus.GetApiTree()
+	apis := util.PermissionBus.GetApiTree()
+	okRes(c, apis)
+}
+
+// 获取菜单树
+func fetchMenuTreeRoute(c *gin.Context) {
+	menus := util.PermissionBus.GetMenuTree()
 	okRes(c, menus)
 }

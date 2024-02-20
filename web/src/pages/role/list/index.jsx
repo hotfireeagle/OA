@@ -2,6 +2,8 @@ import { Card, Button } from "antd"
 import { SearchList, ModalForm, request } from "buerui"
 import { history } from "umi"
 import { useState } from "react"
+import Disabled from "@/components/disabled"
+import { api_function, menu_function } from "@/utils/enum"
 
 const Role = () => {
   const [showNewModal, setShowNewModal] = useState(false) // 是否显示新增角色弹窗
@@ -41,9 +43,13 @@ const Role = () => {
       title: "操作",
       dataIndex: "id",
       render: (v, obj) => {
-        const goEdit = event => {
+        const editApi = event => {
           event.preventDefault()
-          history.push(`/permission/role/edit/${v}`)
+          history.push(`/permission/role/edit/${v}?modifyType=${api_function}`)
+        }
+
+        const editMenu = () => {
+          history.push(`/permission/role/edit/${v}?modifyType=${menu_function}`)
         }
 
         const editRole = () => {
@@ -54,8 +60,8 @@ const Role = () => {
         return (
           <div className="tableOperationAList">
             <a onClick={editRole} href="#">修改</a>
-            <a onClick={goEdit} href="#">编辑功能权限</a>
-            <a href="#">编辑菜单权限</a>
+            <a onClick={editApi} href="#">编辑功能权限</a>
+            <Disabled onClick={editMenu} disabled={obj.hasSetPermission === 0} reason="请先编辑功能权限">编辑菜单权限</Disabled>
           </div>
         )
       }

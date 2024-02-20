@@ -1,33 +1,44 @@
 import { Card, message } from "antd"
 import { BoolForm, request } from "buerui"
-import { useState, useEffect } from "react"
-import { useParams, history } from "umi"
+import { useState, useEffect, useRef } from "react"
+import { useParams, history, useSearchParams } from "umi"
+import { api_function } from "@/utils/enum"
 
 const RoleForm = () => {
   const paramsObj = useParams()
+  const [searchParams] = useSearchParams()
   const [allPermissionList, setAllPermissionList] = useState([]) // 功能权限树
+  const detailRef = useRef()
 
+  const functionValue = searchParams.get("modifyType")
   const isDetailMode = !!paramsObj.id
+
+  const isApi = functionValue == api_function // 判断是修改功能还是修改菜单
 
   const roleFormSchema = [
     {
       label: "角色名称",
-      key: "TODO:1",
+      key: "name",
       type: "input",
-      required: true,
+      readonly: true,
     },
     {
-      label: "角色权限",
-      key: "TODO:2",
+      label: isApi ? "功能权限" : "菜单权限",
+      key: isApi ? "apis" : "menus",
       type: "permissionTree",
       required: true,
       list: allPermissionList,
-      valueKey: "id",
+      valueKey: "name",
     }
   ]
 
   const submitHandler = values => {
-    return request("/TODO:", values).then(() => {
+    const postData = {
+      ...(detailRef.current || {}),
+      ...values,
+    }
+    let updateApi = isApi ? "/role/update/api" : "/role/update/menu"
+    return request(updateApi, postData).then(() => {
       message.success("操作成功")
       history.back(-1)
     })
@@ -35,20 +46,24 @@ const RoleForm = () => {
 
   // 加载权限列表数据
   useEffect(() => {
-    request("/permission/tree", {}, "get").then(res => {
+    let api = isApi ? "/permission/apiTree" : "/permission/menuTree"
+    request(api).then(res => {
       setAllPermissionList(res || [])
     })
   }, [])
 
   return (
-    <Card title="功能配置">
+    <Card title={isApi ? "功能配置" : "菜单配置"}>
       <BoolForm
         detailConfig={{
-          api: "/TODO:",
+          api: `/role/detail/${paramsObj.id}`,
           doRequest: isDetailMode,
+          syncRes: res => detailRef.current = res,
         }}
+
         list={roleFormSchema}
         onSubmit={submitHandler}
+        extraFormProps={{ labelCol: { span: 2, } }}
       />
     </Card>
   )

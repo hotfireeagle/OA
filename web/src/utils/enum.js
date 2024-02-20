@@ -93,3 +93,6 @@ export const account_status_map = {
   "TODO:1": "正常",
   "TODO:2": "被禁用",
 }
+
+export const api_function = 1
+export const menu_function = 2

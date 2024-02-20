@@ -13,16 +13,26 @@ create table bms_users (
 INSERT INTO bms_users (user_id, email, password, is_admin, create_time)
 VALUES ('b9be768f-5a82-4e7e-a820-cdef7b66ec42', 'hotfireeagle@163.com', '5d45197700ac85cf4a74d660a251d82509306311aa8943da60bb8436d4e040f3', 1, NOW());
 
+# 角色表
 create table role (
   id int auto_increment comment '角色ID',
   name varchar(15) comment '角色名称',
+  has_set_permission int default 0 comment '是否配置过功能权限，1表示配置过，0表示没配置过',
   create_time datetime comment '创建时间',
   delete_time datetime comment '删除时间',
   create_uid varchar(36) comment '创建者',
-  menus JSON comment '菜单权限',
-  apis JSON comment '接口权限',
   primary key (id)
 )comment='角色表';
+
+# 角色-权限表
+create table role_permission (
+  id int auto_increment,
+  role_id int comment '角色ID',
+  permission_type int comment '权限类型，1表示接口，2表示菜单',
+  permission varchar(30) comment '权限名称',
+  primary key (id)
+);
+
 
 # 流程组表
 create table flow_group (
