@@ -74,5 +74,18 @@ func updateRoleApi(c *gin.Context) {
 		return
 	}
 
-	errok(roleDetail.UpateApis(), c)
+	err, menus := roleDetail.UpateApis()
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+	okRes(c, menus)
+}
+
+func updateRoleMenuRoute(c *gin.Context) {
+	roleDetail := new(model.RoleDetail)
+	if !validate(c, roleDetail) {
+		return
+	}
+	errok(roleDetail.UpdateMenus(), c)
 }

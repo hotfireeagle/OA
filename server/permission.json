@@ -7,14 +7,29 @@
         "name": "审批配置",
         "spec": "menu",
         "children": [
-      
+          {
+            "name": "获取配置列表",
+            "spec": "api"
+          }               
         ]
       },
       {
         "name": "审批列表",
         "spec": "menu",
         "children": [
-
+          {
+            "name": "新增审批列表",
+            "spec": "api"
+          },
+          {
+            "name": "查询审批详情",
+            "spec": "api"
+          },
+          {
+            "name": "更新审批",
+            "spec": "apiGroup",
+            "group": ["查询审批详情", "编辑审批接口"]
+          }
         ]
       }
     ]
@@ -25,15 +40,47 @@
     "children": [
       {
         "name": "角色管理列表",
-        "spec": "menu"
+        "spec": "menu",
+        "children": [
+          {
+            "spec": "api",
+            "name": "新增角色"
+          },
+          {
+            "spec": "api",
+            "name": "获取角色列表"
+          },
+          {
+            "spec": "api",
+            "name": "更新角色"
+          },
+          {
+            "spec": "api",
+            "name": "获取角色详情"
+          }
+        ]
       },
       {
         "name": "账号管理列表",
-        "spec": "menu"
-      },
-      {
-        "name": "获取菜单树",
-        "spec": "api"
+        "spec": "menu",
+        "children": [
+          {
+            "spec": "api",
+            "name": "新增账号"
+          },
+          {
+            "spec": "api",
+            "name": "获取账号列表"
+          },
+          {
+            "spec": "api",
+            "name": "编辑账号"
+          },
+          {
+            "spec": "api",
+            "name": "获取账号详情"
+          }
+        ]
       }
     ]
   }

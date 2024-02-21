@@ -13,7 +13,7 @@ const Disabled = ({
       if (disabled) {
         return () => {}
       }
-      restProps.onClick
+      return restProps.onClick
     }
 
     const returnClassName = () => {

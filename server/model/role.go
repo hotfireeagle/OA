@@ -1,5 +1,9 @@
 package model
 
+import (
+	"oa/util"
+)
+
 const (
 	ApiPermissionType     = 1
 	MenuPermissionType    = 2
@@ -55,17 +59,17 @@ func (r *Role) Detail() (*RoleDetail, error) {
 	apis := new([]string)
 	menus := new([]string)
 
-	err := DB.Model(r).Find(role).Error
+	err := DB.Where("id = ?", r.Id).Find(role).Error
 	if err != nil {
 		return roleDetail, err
 	}
 
-	err = DB.Model(&RolePermission{}).Where("role_id = ? and permission_type = ?", role.Id, ApiPermissionType).Pluck("permission", apis).Error
+	err = DB.Model(&RolePermission{}).Where("role_id = ? and permission_type = ?", r.Id, ApiPermissionType).Pluck("permission", apis).Error
 	if err != nil {
 		return roleDetail, err
 	}
 
-	err = DB.Model(&RolePermission{}).Where("role_id = ? and permission_type = ?", role.Id, MenuPermissionType).Pluck("permission", menus).Error
+	err = DB.Model(&RolePermission{}).Where("role_id = ? and permission_type = ?", r.Id, MenuPermissionType).Pluck("permission", menus).Error
 	if err != nil {
 		return roleDetail, err
 	}
@@ -91,19 +95,21 @@ func (p *RoleListSearchParam) Pagination() (*[]Role, error) {
 }
 
 // 更新角色的api权限数据
-func (rd *RoleDetail) UpateApis() error {
+func (rd *RoleDetail) UpateApis() (error, []string) {
+	menuNames := make([]string, 0)
+
 	// 删除老权限
 	currentRoleApis := new([]RolePermission)
 	err := DB.Model(&RolePermission{}).Where("role_id = ? and permission_type = ?", rd.Id, ApiPermissionType).Find(currentRoleApis).Error
 	if err != nil {
-		return err
+		return err, menuNames
 	}
 	for _, rp := range *currentRoleApis {
 		DB.Delete(&rp)
 	}
 
-	// 新增权限
-	for _, apiName := range *rd.Apis {
+	// 新增权限，需要进行展开
+	for _, apiName := range util.PermissionBus.ExpandApiGroup(*rd.Apis) {
 		rolePermission := RolePermission{
 			RoleId:         rd.Id,
 			PermissionType: ApiPermissionType,
@@ -112,7 +118,35 @@ func (rd *RoleDetail) UpateApis() error {
 		DB.Create(&rolePermission)
 	}
 
-	DB.Model(&Role{}).Where("id = ?", rd.Id).Update("has_set_permission", HasSetPermissionValue)
+	recommendMenus := util.PermissionBus.GetMenuByLeaf(*rd.Apis)
 
-	return nil
+	DB.Model(&Role{}).Where("id = ?", rd.Id).Update("has_set_permission", HasSetPermissionValue)
+	return nil, recommendMenus
+}
+
+// 更新角色的菜单权限数据
+func (rd *RoleDetail) UpdateMenus() error {
+	// 删除角色的老菜单权限
+	currentRoleMenus := new([]RolePermission)
+	err := DB.Where("role_id = ? and permission_type = ?", rd.Id, MenuPermissionType).Find(currentRoleMenus).Error
+	if err != nil {
+		return err
+	}
+	for _, menu := range *currentRoleMenus {
+		DB.Delete(menu)
+	}
+
+	// 添加新的菜单权限
+	newMenus := make([]RolePermission, 0)
+	for _, menuName := range *rd.Menus {
+		menuItem := RolePermission{
+			RoleId:         rd.Id,
+			PermissionType: MenuPermissionType,
+			Permission:     menuName,
+		}
+		newMenus = append(newMenus, menuItem)
+	}
+
+	err = DB.Create(&newMenus).Error
+	return err
 }

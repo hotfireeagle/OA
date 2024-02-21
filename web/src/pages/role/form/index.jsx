@@ -1,4 +1,4 @@
-import { Card, message } from "antd"
+import { Card, message, notification, Button } from "antd"
 import { BoolForm, request } from "buerui"
 import { useState, useEffect, useRef } from "react"
 import { useParams, history, useSearchParams } from "umi"
@@ -32,15 +32,37 @@ const RoleForm = () => {
     }
   ]
 
-  const submitHandler = values => {
+  const submitHandler = (values, forceMenu=false) => {
     const postData = {
       ...(detailRef.current || {}),
       ...values,
     }
-    let updateApi = isApi ? "/role/update/api" : "/role/update/menu"
-    return request(updateApi, postData).then(() => {
+    let isApi2 = forceMenu ? false : isApi
+    let updateApi = isApi2 ? "/role/update/api" : "/role/update/menu"
+    return request(updateApi, postData).then(res => {
+      if (isApi2) {
+        const clickCb = () => {
+          const datas = {
+            menus: res,
+          }
+          submitHandler(datas, true)
+        }
+        // 修改功能权限时，会根据功能权限推荐默认的菜单权限
+        if (detailRef.current.hasSetPermission == 0) {
+          // 之前从来没有设置过，第一次一定要进行覆盖
+          clickCb()
+        } else {
+          // 菜单已经设置过了，那么这里只是提醒一下是否要按照推荐方案进行更新
+          notification.info({
+            message: "是否按照推荐方案更新菜单权限",
+            description: (<Button type="primary" size="small" onClick={clickCb}>应用推荐方案</Button>),
+          })
+        } 
+      }
       message.success("操作成功")
-      history.back(-1)
+      if (!forceMenu) {
+        history.back(-1)
+      }
     })
   }
 
