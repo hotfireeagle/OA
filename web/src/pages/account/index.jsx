@@ -9,17 +9,13 @@ import {
 import { Card, Button, message } from "antd"
 import { account_status_map } from "@/utils/enum"
 import { useState } from "react"
-import {
-  roleFunction,
-  departmentFunction,
-} from "@/utils/function"
 
 const accountList = () => {
   const [showNewAccountModal, setShowNewAccountModal] = useState(false)
   const [activeAccount, setActiveAccount] = useState({})
   const [reloadList, setReloadList] = useState(false)
-  const roleList = roleFunction.useRoleList()
-  const departmentList = departmentFunction.useDepartmentList()
+  const roleList = []
+  const departmentList = []
 
   const checkIsValidaActiveAccount = () => !!activeAccount["TODO:id字段名称"]
 
@@ -175,14 +171,9 @@ const accountList = () => {
       required: true,
     },
     // 关联角色
-    roleFunction.roleFormListConfigFun({ treeData: roleList, label: "关联角色" }),
+    // roleFunction.roleFormListConfigFun({ treeData: roleList, label: "关联角色" }),
     // 关联部门
-    departmentFunction.departmentFormListConfigFun({ treeData: departmentList }),
-    {
-      label: "钉钉ID",
-      key: "TODO:5",
-      type: "input",
-    },
+    // departmentFunction.departmentFormListConfigFun({ treeData: departmentList }),
     {
       label: "备注",
       key: "TODO:8",

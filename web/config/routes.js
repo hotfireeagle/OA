@@ -22,11 +22,10 @@ export default [
 		"path": "/permission",
 		"name": "权限管理",
 		"routes": [
-			{
-				"path": "/permission/department",
-				"name": "部门管理列表",
-				"component": "./department/index"
-			},
+      {
+        "path": "/permission",
+        "redirect": "/permission/role",
+      },
       {
         "path": "/permission/role",
 				"name": "角色列表",
@@ -44,11 +43,11 @@ export default [
 				"component": "./role/form",
         "hideInMenu": true,
       },
-      // {
-      //   "path": "/permission/setting",
-      //   "name": "权限编辑",
-      //   "component": "./role/permission/index",
-      // }
+      {
+        "path": "/permission/account/list",
+        "name": "账户列表",
+        "component": "./account/index",
+      }
 		]
 	},
 	{
