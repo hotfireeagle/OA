@@ -12,20 +12,39 @@ import (
 
 func insertBmsUserRoute(c *gin.Context) {
 	userObj := new(model.BmsUser)
-	userObj.IsAdmin = 0 // 不允许通过API的形式新增超级管理员用户
 
 	if !validate(c, userObj) {
 		return
 	}
 
-	userObj.Password = util.Sha256(userObj.Password)
+	r, e := model.FindRole(userObj.RoleId)
+	if e != nil {
+		errRes(c, e)
+		return
+	}
+
+	if r.IsAdminRole == model.IsAdminRole {
+		errRes(c, errors.New("不合法"))
+		return
+	}
+
+	p := util.Random(12)
+	userObj.Password = util.Sha256(p)
 	err := userObj.Insert()
 	if err != nil {
 		errRes(c, err)
 		return
 	}
 
-	okRes(c, "")
+	okRes(c, p)
+}
+
+func updateBmsUserRoute(c *gin.Context) {
+	u := new(model.BmsUser)
+	if !validate(c, u) {
+		return
+	}
+	errok(u.Update(), c)
 }
 
 // 后台用户进行登录的路由
@@ -66,4 +85,18 @@ func fetchUserDetailRoute(c *gin.Context) {
 	}
 	userDetail.Password = ""
 	okRes(c, userDetail)
+}
+
+func userListRoute(c *gin.Context) {
+	q := new(model.BmsUserQueryParam)
+	if !validate(c, q) {
+		return
+	}
+	u := &model.BmsUser{}
+	a, e := u.UserList(q)
+	if e != nil {
+		errRes(c, e)
+		return
+	}
+	okRes(c, a)
 }

@@ -97,3 +97,22 @@ type PaginationParam struct {
 	Current  int `json:"current"`
 	PageSize int `json:"pageSize"`
 }
+
+func (p PaginationParam) Offset() int {
+	var (
+		c  int
+		ps int
+	)
+	if p.Current == 0 {
+		c = 1
+	} else {
+		c = p.Current
+	}
+	if p.PageSize == 0 {
+		ps = 10
+	} else {
+		ps = p.PageSize
+	}
+
+	return (c - 1) * ps
+}

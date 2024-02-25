@@ -8,6 +8,7 @@ const (
 	ApiPermissionType     = 1
 	MenuPermissionType    = 2
 	HasSetPermissionValue = 1
+	IsAdminRole           = 1
 )
 
 type RoleListSearchParam struct {
@@ -18,6 +19,7 @@ type RoleListSearchParam struct {
 type Role struct {
 	Id               int    `json:"id" gorm:"column:id"`
 	Name             string `json:"name" gorm:"column:name" binding:"required"`
+	IsAdminRole      int    `json:"isAdminRole" gorm:"column:is_admin_role"`
 	HasSetPermission int    `json:"hasSetPermission" gorm:"column:has_set_permission"`
 	BaseColumn
 }
@@ -44,6 +46,7 @@ func (r Role) TableName() string {
 }
 
 func (r *Role) Insert() error {
+	r.IsAdminRole = 0
 	return DB.Create(r).Error
 }
 
@@ -85,7 +88,7 @@ func (r *Role) Detail() (*RoleDetail, error) {
 func (p *RoleListSearchParam) Pagination() (*[]Role, error) {
 	roleList := new([]Role)
 
-	query := DB.Model(&Role{})
+	query := DB.Model(&Role{}).Where("is_admin_role = ?", 0)
 	if p.Name != "" {
 		query = query.Where("name = ?", p.Name)
 	}
@@ -149,4 +152,9 @@ func (rd *RoleDetail) UpdateMenus() error {
 
 	err = DB.Create(&newMenus).Error
 	return err
+}
+
+func FindRole(id int) (*Role, error) {
+	r := new(Role)
+	return r, DB.Where("id = ?", id).Find(r).Error
 }
