@@ -158,3 +158,8 @@ func FindRole(id int) (*Role, error) {
 	r := new(Role)
 	return r, DB.Where("id = ?", id).Find(r).Error
 }
+
+func (r *Role) FindAllRole() (*[]Role, error) {
+	roleList := new([]Role)
+	return roleList, DB.Where("is_admin_role = ?", 0).Find(roleList).Error
+}

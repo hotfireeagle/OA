@@ -40,6 +40,7 @@ func InitRoute(g *gin.Engine) {
 	roleGroup.POST("/detail/:id", fetchRoleDetailRoute)
 	roleGroup.POST("/update/api", updateRoleApi)
 	roleGroup.POST("/update/menu", updateRoleMenuRoute)
+	roleGroup.POST("/listAll", fetchAllRoleRoute)
 
 	commonGroup := bmsGroup.Group("/common")
 	commonGroup.GET("/notifyMethodList", fetchNotifyMethodListRoute)

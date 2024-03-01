@@ -2,7 +2,6 @@ import { NodeCommon } from "../../atom"
 import { useState } from "react"
 import { Drawer, Form } from "antd"
 import { FormList } from "buerui"
-import { DepartmentAndUserSelect } from "@/components/departmentAndUserSelect"
 
 export const BeginNode = props => {
   const [showDrawer, setShowDrawer] = useState(false)
@@ -14,7 +13,7 @@ export const BeginNode = props => {
       type: "custom",
       key: "whoCanBegin",
       required: true,
-      render: () => <DepartmentAndUserSelect />,
+      render: () => "shit",
     }
   ]
 

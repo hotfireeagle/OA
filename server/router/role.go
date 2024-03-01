@@ -39,6 +39,17 @@ func fetchRoleListRoute(c *gin.Context) {
 	okRes(c, roleListRes)
 }
 
+// 获取所有的角色
+func fetchAllRoleRoute(c *gin.Context) {
+	r := new(model.Role)
+	l, e := r.FindAllRole()
+	if e != nil {
+		errRes(c, e)
+		return
+	}
+	okRes(c, l)
+}
+
 // 更新角色名称
 func updateRoleNameRoute(c *gin.Context) {
 	role := new(model.Role)

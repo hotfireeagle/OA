@@ -1,107 +1,46 @@
 import {
   SearchList,
-  obj2oplist,
   ModalForm,
   request,
-  SwitchConfirm,
-  cv,
 } from "buerui"
-import { Card, Button, message } from "antd"
-import { account_status_map } from "@/utils/enum"
+import { Card, Button, message, Modal } from "antd"
 import { useState } from "react"
+import { useRoleList } from "@/utils/ajax"
+import ToClipboard from "@/components/copy"
 
 const accountList = () => {
+  const roleList = useRoleList()
+
   const [showNewAccountModal, setShowNewAccountModal] = useState(false)
   const [activeAccount, setActiveAccount] = useState({})
   const [reloadList, setReloadList] = useState(false)
-  const roleList = []
-  const departmentList = []
 
-  const checkIsValidaActiveAccount = () => !!activeAccount["TODO:id字段名称"]
+  const checkIsValidaActiveAccount = () => !!activeAccount["userId"]
 
   const tableColumnList = [
     {
-      title: "成员名称",
-      dataIndex: "TODO:1",
+      title: "账号",
+      dataIndex: "email",
     },
     {
-      title: "联系方式",
-      dataIndex: "TODO:2",
-    },
-    {
-      title: "邮箱",
-      dataIndex: "TODO:3",
-    },
-    {
-      title: "创建时间",
-      dataIndex: "TODO:4",
-    },
-    {
-      title: "最后登录时间",
-      dataIndex: "TODO:5",
-    },
-    {
-      title: "关联角色",
-      dataIndex: "TODO:6",
-    },
-    {
-      title: "关联部门",
-      dataIndex: "TODO:",
-    },
-    {
-      title: "备注",
-      dataIndex: "TODO:",
-    },
-    {
-      title: "状态",
-      dataIndex: "TODO:",
-      render: (v, obj) => {
-        return (
-          <SwitchConfirm
-            modelData={obj}
-            extraAtomProps={{
-              checked: !!v,
-            }}
-            openApi="/TODO:"
-            cancelApi="/TODO:"
-            openContent="是否确定启用该成员账号？启用之后可以通过账号密码登录后台。"
-            cancelContent="是否确定禁用该成员账号？禁用之后无法登录后台。"
-            reload={() => setReloadList(!reloadList)}
-          />
-        )
-      }
-    },
-    {
-      title: "操作",
-      dataIndex: "TODO:",
-      render: () => {
-        const goDetail = event => {
-          event.preventDefault()
-        }
-
-        return (
-          <a onClick={goDetail} href="#">编辑</a>
-        )
-      }
+      title: "角色",
+      dataIndex: "roleName",
     },
   ]
 
   const searchSchemaList = [
     {
-      label: "成员名称",
+      label: "账号",
       type: "input",
-      key: "TODO:1",
+      key: "email",
     },
     {
-      label: "联系方式",
-      type: "input",
-      key: "TODO:2",
-    },
-    {
-      label: "状态",
+      label: "角色",
       type: "select",
-      key: "TODO:3",
-      oplist: obj2oplist(account_status_map),
+      key: "roleId",
+      oplist: roleList,
+      opk: "id",
+      opv: "name",
     },
   ]
 
@@ -122,9 +61,9 @@ const accountList = () => {
       ...activeAccount,
       ...values,
     }
-    let url = "TODO:/新增接口"
+    let url = "/user/insert"
     if (checkIsValidaActiveAccount()) {
-      url = "/TODO:编辑接口"
+      url = "/user/update"
     }
 
     return request(url, postData, "post").then(res => {
@@ -134,13 +73,24 @@ const accountList = () => {
 
       if (!checkIsValidaActiveAccount()) {
         // 新增账号的情况下，显示密码弹窗
-        const password = res["TODO:密码字段"]
-        Modal.info({
+        const password = res
+        const modalIns = Modal.info({
           title: "初始密码",
           content: `初始密码：${password}`,
-          onOk: function() {
-            cv(password)
+          maskClosable: false,
+          footer: () => {
+            const close = () => {
+              modalIns.destroy()
+            }
+            return (
+              <ToClipboard text={password} cb={close}>
+                <Button type="primary">复制</Button>
+              </ToClipboard>
+            )
           }
+          // onOk: function() {
+          //   cv(password)
+          // }
         })
       }
     })
@@ -153,38 +103,26 @@ const accountList = () => {
 
   const configFormList = [
     {
-      label: "成员名称",
-      key: "TODO:1",
+      label: "账号",
+      key: "email",
       type: "input",
       required: true,
     },
     {
-      label: "联系方式",
-      key: "TODO:2",
-      type: "input",
+      label: "角色",
+      key: "roleId",
+      type: "select",
+      oplist: roleList,
+      opk: "id",
+      opv: "name",
       required: true,
     },
-    {
-      label: "邮箱",
-      key: "TODO:3",
-      type: "input",
-      required: true,
-    },
-    // 关联角色
-    // roleFunction.roleFormListConfigFun({ treeData: roleList, label: "关联角色" }),
-    // 关联部门
-    // departmentFunction.departmentFormListConfigFun({ treeData: departmentList }),
-    {
-      label: "备注",
-      key: "TODO:8",
-      type: "textArea",
-    }
   ]
 
   return (
     <Card>
       <SearchList
-        url="/TODO:"
+        url="/user/list"
         tableColumns={tableColumnList}
         searchSchema={searchSchemaList}
         useCache={true}

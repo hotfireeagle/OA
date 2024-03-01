@@ -3,19 +3,27 @@ package model
 import (
 	"oa/util"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type BmsUser struct {
-	UserId     string    `json:"userId" gorm:"column:user_id"`
-	Email      string    `json:"email" gorm:"column:email" binding:"required"`
-	Password   string    `json:"password,omitempty" gorm:"column:password" binding:"required"`
-	RoleId     int       `json:"roleId" gorm:"column:role_id"`
-	CreateTime time.Time `json:"createTime" gorm:"column:create_time"`
-	DeleteTime time.Time `json:"deleteTime" gorm:"column:delete_time"`
+	UserId     string     `json:"userId" gorm:"column:user_id"`
+	Email      string     `json:"email" gorm:"column:email" binding:"required"`
+	Password   string     `json:"password,omitempty" gorm:"column:password"`
+	RoleId     int        `json:"roleId" gorm:"column:role_id"`
+	CreateTime CustomTime `json:"createTime" gorm:"column:create_time"`
+	DeleteTime CustomTime `json:"deleteTime" gorm:"column:delete_time"`
+}
+
+type BmsUserListItem struct {
+	BmsUser
+	RoleName string `json:"roleName" gorm:"column:role_name"`
 }
 
 type BmsUserQueryParam struct {
-	Email string `json:"email"`
+	Email  string `json:"email"`
+	RoleId int    `json:"roleId"`
 	PaginationParam
 }
 
@@ -30,6 +38,7 @@ func (b BmsUser) TableName() string {
 }
 
 func (b *BmsUser) Insert() error {
+	b.UserId = uuid.NewString()
 	return DB.Create(b).Error
 }
 
@@ -92,13 +101,19 @@ func (b BmsUser) SearchByEmail() (*BmsUser, error) {
 	return u, DB.Where("email = ?", b.Email).First(u).Error
 }
 
-func (b BmsUser) UserList(q *BmsUserQueryParam) (*[]BmsUser, error) {
-	u := new([]BmsUser)
+func (b BmsUser) UserList(q *BmsUserQueryParam) (*[]BmsUserListItem, error) {
+	u := new([]BmsUserListItem)
 
 	db := DB.Model(&BmsUser{})
 	if q.Email != "" {
 		db = db.Where("email = ?", q.Email)
 	}
+	if q.RoleId != 0 {
+		db = db.Where("role_id = ?", q.RoleId)
+	}
+	db = db.Joins("LEFT JOIN role ON bms_users.role_id = role.id").Where("role.is_admin_role = ?", 0).Select("bms_users.*, role.name as role_name")
+	// subQuery := DB.Model(&Role{}).Where("is_admin_role = ?", 0).Select("id")
+	// db = db.Where("role_id IN (?)", subQuery)
 	err := db.Limit(q.PageSize).Offset(q.Offset()).Find(u).Error
 	return u, err
 }
