@@ -1,9 +1,13 @@
 package router
 
 import (
+	"errors"
 	"oa/model"
+	"regexp"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-sql-driver/mysql"
 )
 
 // 业务逻辑运行正常时的响应数据
@@ -20,6 +24,11 @@ func errRes(ctx *gin.Context, err error) {
 	errMsg := err.Error()
 	if errMsg == "EOF" {
 		errMsg = "wrong request body"
+	}
+
+	if isDuplicateEntryError(err) {
+		column := extractDuplicateField(errMsg)
+		errMsg = column + "重复"
 	}
 
 	res := model.Response{
@@ -61,4 +70,24 @@ func errok(operationResult error, c *gin.Context) {
 	} else {
 		okRes(c, "")
 	}
+}
+
+func isDuplicateEntryError(err error) bool {
+	var mysqlErr *mysql.MySQLError
+
+	if ok := errors.As(err, &mysqlErr); ok {
+		return mysqlErr.Number == 1062
+	}
+
+	return false
+}
+
+func extractDuplicateField(errorMessage string) string {
+	re := regexp.MustCompile(`Duplicate entry '.*' for key '(.*)'`)
+	match := re.FindStringSubmatch(errorMessage)
+	if len(match) > 1 {
+		field := match[1]
+		return strings.Split(field, ".")[1]
+	}
+	return "数据"
 }
