@@ -2,8 +2,9 @@ import { SettingDrawer } from "@ant-design/pro-components"
 import { history } from "@umijs/max"
 import defaultSettings from "../config/defaultSettings"
 import { ProBreadcrumb } from "@ant-design/pro-components"
-import { tokenStore, request } from "buerui"
+import { tokenStore } from "buerui"
 import { LogoutOutlined } from "@ant-design/icons"
+import { fetchUserInfo } from "@/utils/ajax"
 
 const loginPath = "/user/login"
 
@@ -11,16 +12,15 @@ const loginPath = "/user/login"
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState() {
-  const fetchUserInfo = async () => {
-    return request("/user/detail")
-  }
   const { location } = history
   if (!location.pathname.includes(loginPath)) {
-    const currentUser = await fetchUserInfo()
+    const currentUser = await fetchUserInfo() || {}
+    const { menus } = currentUser
     return {
       fetchUserInfo,
       currentUser,
       settings: defaultSettings,
+      menus,
     }
   }
   return {

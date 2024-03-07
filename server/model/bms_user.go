@@ -29,8 +29,8 @@ type BmsUserQueryParam struct {
 
 type UserMeta struct {
 	*BmsUser
-	Menus []string
-	Apis  []string
+	Menus []string `json:"menus"`
+	Apis  []string `json:"apis"`
 }
 
 func (b BmsUser) TableName() string {

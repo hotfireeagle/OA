@@ -2,25 +2,29 @@ export default [
 	{
 		"path": "/flowModule",
 		"name": "流程管理",
-		"component": "./flowModule/list/index"
-	},
-	{
-		"path": "/flowModule/detail/:id",
-		"name": "流程详情",
-		"component": "./flowModule/form/index",
-		"hideInMenu": true,
-		"layout": false
-	},
-	{
-		"path": "/flowModule/new",
-		"name": "新增流程",
-		"component": "./flowModule/form/index",
-		"hideInMenu": true,
-		"layout": false
+		"component": "./flowModule/list/index",
+    "access": "流程管理",
+    "routes": [
+      {
+        "path": "/flowModule/detail/:id",
+        "name": "流程详情",
+        "component": "./flowModule/form/index",
+        "hideInMenu": true,
+        "layout": false
+      },
+      {
+        "path": "/flowModule/new",
+        "name": "新增流程",
+        "component": "./flowModule/form/index",
+        "hideInMenu": true,
+        "layout": false
+      },
+    ],
 	},
 	{
 		"path": "/permission",
 		"name": "权限管理",
+    "access": "权限管理",
 		"routes": [
       {
         "path": "/permission",
@@ -28,8 +32,9 @@ export default [
       },
       {
         "path": "/permission/role",
-				"name": "角色列表",
-				"component": "./role/list"
+				"name": "角色管理列表",
+				"component": "./role/list",
+        "access": "角色管理列表",
       },
       {
         "path": "/permission/role/new",
@@ -45,8 +50,9 @@ export default [
       },
       {
         "path": "/permission/account/list",
-        "name": "账户列表",
+        "name": "账号管理列表",
         "component": "./account/index",
+        "access": "账号管理列表",
       }
 		]
 	},

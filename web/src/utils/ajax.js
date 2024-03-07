@@ -10,3 +10,8 @@ export const useRoleList = () => {
 
   return allRoleList
 }
+
+// 请求用户详情数据
+export const fetchUserInfo = async () => {
+  return request("/user/detail")
+}
