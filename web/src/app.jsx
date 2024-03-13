@@ -2,7 +2,7 @@ import { SettingDrawer } from "@ant-design/pro-components"
 import { history } from "@umijs/max"
 import defaultSettings from "../config/defaultSettings"
 import { ProBreadcrumb } from "@ant-design/pro-components"
-import { tokenStore } from "buerui"
+import { tokenStore, permissionStore } from "buerui"
 import { LogoutOutlined } from "@ant-design/icons"
 import { fetchUserInfo } from "@/utils/ajax"
 
@@ -16,6 +16,7 @@ export async function getInitialState() {
   if (!location.pathname.includes(loginPath)) {
     const currentUser = await fetchUserInfo() || {}
     const { menus } = currentUser
+    permissionStore.set(menus)
     return {
       fetchUserInfo,
       currentUser,

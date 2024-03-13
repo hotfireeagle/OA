@@ -75,6 +75,15 @@ export default [
 			}
 		]
 	},
+  {
+    "path": "/unAuth",
+    "component": "./unAuth",
+    "layout": false,
+  },
+  {
+    "path": "/",
+    "component": "./firstRoute",
+  },
 	{
 		"path": "*",
 		"layout": false,

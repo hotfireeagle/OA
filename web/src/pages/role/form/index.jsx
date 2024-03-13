@@ -32,6 +32,12 @@ const RoleForm = () => {
     }
   ]
 
+  /**
+   * 
+   * @param {*} values 
+   * @param {*} forceMenu ：传true的话表示是强制更新菜单
+   * @returns 
+   */
   const submitHandler = (values, forceMenu=false) => {
     const postData = {
       ...(detailRef.current || {}),
@@ -59,8 +65,9 @@ const RoleForm = () => {
           })
         } 
       }
-      message.success("操作成功")
+
       if (!forceMenu) {
+        message.success("操作成功")
         history.back(-1)
       }
     })
