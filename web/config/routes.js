@@ -1,26 +1,34 @@
 export default [
 	{
 		"path": "/flowModule",
-		"name": "流程管理",
-		"component": "./flowModule/list/index",
-    "access": "流程管理",
+		"name": "审批管理",
+    "access": "审批管理",
     "routes": [
       {
-        "path": "/flowModule/detail/:id",
-        "name": "流程详情",
-        "component": "./flowModule/form/index",
-        "hideInMenu": true,
-        "layout": false
+        "path": "/flowModule",
+        "redirect": "/flowModule/list",
       },
       {
-        "path": "/flowModule/new",
-        "name": "新增流程",
-        "component": "./flowModule/form/index",
-        "hideInMenu": true,
-        "layout": false
+        "path": "/flowModule/list",
+        "name": "审批列表",
+        "component": "./flowModule/list/index",
       },
     ],
 	},
+  {
+    "path": "/flowModule/detail/:id",
+    "name": "审批详情",
+    "component": "./flowModule/form/index",
+    "hideInMenu": true,
+    "layout": false
+  },
+  {
+    "path": "/flowModule/new",
+    "name": "新增审批",
+    "component": "./flowModule/form/index",
+    "hideInMenu": true,
+    "layout": false
+  },
 	{
 		"path": "/permission",
 		"name": "权限管理",

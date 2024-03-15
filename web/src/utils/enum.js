@@ -68,16 +68,16 @@ export const initFlowData = {
           attr: {
             // 在条件配置数据里面可以是各种条件
           },
-          next: {
-            id: uuidv4(),
-            nodeType: flowNodeType.begin,
-            attr: {},
-            next: {
-              id: uuidv4(),
-              nodeType: flowNodeType.begin,
-              attr: {},
-            },
-          },
+          // next: {
+          //   id: uuidv4(),
+          //   nodeType: flowNodeType.begin,
+          //   attr: {},
+          //   next: {
+          //     id: uuidv4(),
+          //     nodeType: flowNodeType.begin,
+          //     attr: {},
+          //   },
+          // },
         }, // case分支1
         {
           nodeType: flowNodeType.caseBranch,

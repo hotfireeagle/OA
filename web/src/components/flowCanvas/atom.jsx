@@ -53,7 +53,6 @@ export const NextNode = props => {
       }
     }
 
-    // 设计成树形结构会好些
     let newFlowData = { ...flowData }
     let hit
     const findFlowData = node => {
@@ -114,16 +113,9 @@ export const NextNode = props => {
     )
   }
 
-  let line2Cls = `${styles.line} ${styles.line2}`
-  let containerStyle = { marginBottom: 3 }
-  if (props.hideArrow) {
-    line2Cls = styles.line
-    containerStyle.marginBottom = 0
-  }
-
   return (
     <>
-      <div style={containerStyle} className={styles.newContainer}>
+      <div className={styles.newContainer}>
         <div className={`${styles.line} ${styles.line1}`} />
         <Tooltip
           color="#fff"
@@ -135,7 +127,7 @@ export const NextNode = props => {
             <span className={styles.plusCls}>+</span>
           </div>
         </Tooltip>
-        <div className={line2Cls} />
+        <div className={styles.line} />
       </div>
 
       {
@@ -147,23 +139,40 @@ export const NextNode = props => {
   )
 }
 
+/**
+ * 所有节点都会使用它来进行渲染
+ * @param {*} props 
+ * @returns 
+ */
 export const NodeCommon = props => {
   const clickHandler = () => {
-    if (props.onClick) {
-      props.onClick()
-    }
+    // if (props.onClick) {
+    //   props.onClick()
+    // }
+  }
+
+  // 判断是否显示顶部的箭头
+  const checkShowTopHeaderArrow = () => {
+    const hide = [flowNodeType.begin]
+    return !hide.includes(props?.nodeType)
   }
 
   return (
     <div onClick={clickHandler} className={styles.nodeWrapper}>
       <div className={styles.nodeContainer}>
         <div className={`${styles.nodeHeader} ${styles.beginNodeHeader}`}>
+          {
+            checkShowTopHeaderArrow() ? (
+              <div className={styles.withArrowInNodeHeader}></div>
+            ) : null
+          }
           <span>{props.title}</span>
         </div>
         <div className={styles.nodeBody}>
           {props.contentRender()}
         </div>
       </div>
+      {/** 下一个节点 */}
       <NextNode {...props} />
     </div>
   )

@@ -14,8 +14,11 @@ const loginPath = "/user/login"
 export async function getInitialState() {
   const { location } = history
   if (!location.pathname.includes(loginPath)) {
-    const currentUser = await fetchUserInfo() || {}
-    const { menus } = currentUser
+    let currentUser = {}
+    try {
+      currentUser = await fetchUserInfo() || {}
+    } catch (err) {}
+    const { menus=[] } = currentUser
     permissionStore.set(menus)
     return {
       fetchUserInfo,

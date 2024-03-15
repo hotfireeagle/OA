@@ -39,19 +39,6 @@
   }
   .line2 {
     position: relative;
-    &::after {
-      content: "";
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-top: @arrowWidth solid @lineColor;
-      border-left: @arrowWidth solid transparent;
-      border-right: @arrowWidth solid transparent;
-      border-bottom: @arrowWidth solid transparent;
-      bottom: -@arrowWidth;
-      left: 50%;
-      transform: translateX(-50%);
-    }
   }
 }
 .addNodeModal {
@@ -84,6 +71,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  z-index: 5;
 }
 .nodeContainer {
   width: @nodeWidth;
@@ -104,9 +93,24 @@
     font-size: 12px;
     border-top-left-radius: @borderRadius;
     border-top-right-radius: @borderRadius;
+    position: relative;
   }
   .beginNodeHeader {
     background: rgb(122, 147, 157);
+  }
+  .withArrowInNodeHeader {
+    position: absolute;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform: translateX(-50%);
+    border-width: @arrowWidth;
+    border-style: solid;
+    border-color: @lineColor;
+    border-left-color: transparent;
+    border-bottom-color: transparent;
+    border-right-color: transparent;
+    top: -@arrowWidth;
   }
   .nodeBody {
     height: 60px;
@@ -149,20 +153,26 @@
   display: flex;
   align-items: stretch;
   position: relative;
+  z-index: 8;
+  background: #f5f6f6;
   &::before {
     content: "";
+    width: @lineSize;
+    height: calc(@caseMb / 2);
     position: absolute;
-    left: calc(calc(@nodeWidth / 2) - 1px);
-    right: calc(calc(@nodeWidth / 2) - 1px);
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(-@caseMb / 2);
+    background: #f5f6f6;
+  }
+  .topXLine {
+    position: absolute;
     top: calc(calc(-@caseMb / 2) - calc(@lineSize / 2));
     height: @lineSize;
     background: @lineColor;
   }
-  &::after {
-    content: "";
+  .bottomXLine {
     position: absolute;
-    left: calc(calc(@nodeWidth / 2) - 1px);
-    right: calc(calc(@nodeWidth / 2) - 1px);
     bottom: 0;
     height: @lineSize;
     background: @lineColor;
@@ -180,16 +190,19 @@
     &:hover {
       box-shadow: 0 0 3px 0 #1989fa;
     }
-    &::before {
-      content: "";
-      position: absolute;
-      width: @lineSize;
-      height: calc(@caseMb / 2);
-      left: 50%;
-      transform: translateX(-50%);
-      top: calc(-@caseMb / 2);
-      background: @lineColor;
-    }
+  }
+}
+.caseNodeWrapper {
+  position: relative;
+  .fullYLine {
+    position: absolute;
+    width: @lineSize;
+    left: 50%;
+    transform: translateX(-50%);
+    background: @lineColor;
+    top: calc(-@caseMb / 2 - 1px);
+    bottom: 0;
+    z-index: 1;
   }
 }
 .caseNodeWrapper+.caseNodeWrapper {
