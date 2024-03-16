@@ -1,7 +1,7 @@
 import { NextNode, NodeCommon } from "../../atom"
 import styles from "../../atom.less"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
-import { findTreeNode, appendCaseToSwitchNode } from "@/pages/flowModule/form/components/flow/tool"
+import { findTreeNode, appendCaseToSwitchNode } from "../../tool"
 import { CloseSquareOutlined } from "@ant-design/icons"
 import { useLayoutEffect, useState } from "react"
 import { uuid2id } from "@/utils"

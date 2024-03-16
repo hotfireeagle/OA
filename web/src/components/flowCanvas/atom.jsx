@@ -10,6 +10,7 @@ import styles from "./atom.less"
 import { Tooltip } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { v4 as uuidv4 } from "uuid"
+import { componentColorMap } from "./enum"
 
 export const FlowAtom = props => {
   if (!props) {
@@ -160,7 +161,12 @@ export const NodeCommon = props => {
   return (
     <div onClick={clickHandler} className={styles.nodeWrapper}>
       <div className={styles.nodeContainer}>
-        <div className={`${styles.nodeHeader} ${styles.beginNodeHeader}`}>
+        <div
+          className={styles.nodeHeader}
+          style={{
+            background: componentColorMap[props.nodeType],
+          }}
+        >
           {
             checkShowTopHeaderArrow() ? (
               <div className={styles.withArrowInNodeHeader}></div>

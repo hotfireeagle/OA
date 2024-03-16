@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from "uuid"
+import { flowNodeType } from "@/utils/enum"
 
 /**
  * 找出指定节点
@@ -42,5 +43,6 @@ export const appendCaseToSwitchNode = switchNode => {
 
   switchNode.attr.caseSchema.push({
     id: uuidv4(),
+    nodeType: flowNodeType.caseBranch,
   })
 }
