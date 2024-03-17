@@ -2,8 +2,12 @@ import { BoolForm, request } from "buerui"
 import styles from "./index.less"
 import ChooseAndNewGroup from "./chooseAndNewGroup"
 import { history } from "umi"
+import { pubsub, saveKeys } from "../../tool"
+import { useEffect, useRef } from "react"
 
 export const Basic = props => {
+  const formRef = useRef()
+
   const basicFormList = [
     {
       label: "表单名称",
@@ -38,6 +42,7 @@ export const Basic = props => {
       label: "表单说明",
       type: "textArea",
       key: "flowDesc",
+      required: true,
     }
   ]
 
@@ -45,15 +50,25 @@ export const Basic = props => {
     layout: "vertical",
   }
 
-  const submitHandler = values => {
-    return request("/api/bms/flowBasic/insert", values).then(flowId => {
-      history.replace(`/flowModule/detail/${flowId}`)
-    })
-  }
+  useEffect(() => {
+    const submitHandler = async () => {
+      const values = await formRef.current.submit()
+      return request("/api/bms/flowBasic/insert", values).then(flowId => {
+        history.replace(`/flowModule/detail/${flowId}`)
+      })
+    }
+  
+    pubsub.register(saveKeys.basic, submitHandler)
+
+    return () => {
+      pubsub.unRegister(saveKeys.basic)
+    }
+  }, [])
 
   return (
     <div className={styles.container}>
       <BoolForm
+        ref={formRef}
         detailConfig={{
           api: `/api/bms/flowBasic/${props.basicId}`,
           requestMethod: "get",
@@ -61,8 +76,7 @@ export const Basic = props => {
         }}
         list={basicFormList}
         extraFormProps={extraFormProps}
-        submitBtnText="保存并进入下一步"
-        onSubmit={submitHandler}
+        hideBtn={true}
       />
     </div>
   )

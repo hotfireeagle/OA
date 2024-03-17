@@ -6,6 +6,7 @@ import { Flow } from "./components/flow"
 import { useState, useMemo, useEffect } from "react"
 import { useParams } from "umi"
 import { request } from "buerui"
+import { pubsub, saveKeys } from "./tool"
 
 const FlowModuleDetail = () => {
   const { id } = useParams()
@@ -13,16 +14,21 @@ const FlowModuleDetail = () => {
   const [flowDetail, setFlowDetail] = useState({})
 
   const steps = [
-    { stepName: "①基础信息", },
-    { stepName: "②审批表单", },
-    { stepName: "③审批流程", },
-    { stepName: "④扩展设置", }
+    { stepName: "①基础信息", key: saveKeys.basic },
+    { stepName: "②审批表单", key: saveKeys.form },
+    { stepName: "③审批流程", key: saveKeys.config },
   ]
 
   const eleList = useMemo(() => [
     <Basic basicId={flowDetail?.flowBasicId} />,
+    null,
     <Flow />,
   ], [flowDetail])
+
+  const saveCurrentStepHandler = () => {
+    const keyName = steps[activeStep].key
+    pubsub.publish(keyName)
+  }
 
   useEffect(() => {
     if (!id) {
@@ -43,7 +49,7 @@ const FlowModuleDetail = () => {
             type="primary"
             icon={<LeftSquareOutlined />}
           >
-            取消
+            回到列表
           </Button>
           <span className={styles.formNameCls}>未命名表单</span>
         </div>
@@ -61,17 +67,19 @@ const FlowModuleDetail = () => {
           }
         </div>
         <div className={styles.right}>
-          <Button
+          {/* <Button
             className={styles.mr10}
             icon={<SendOutlined />}
             type="primary"
           >
             发布
-          </Button>
+          </Button> */}
           <Button
             icon={<FileDoneOutlined />}
+            type="primary"
+            onClick={saveCurrentStepHandler}
           >
-            保存
+            保存当前步骤
           </Button>
         </div>
       </div>
