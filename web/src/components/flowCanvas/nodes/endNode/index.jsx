@@ -1,9 +1,12 @@
-import { NextNode } from "../../atom"
+import { NodeCommon } from "../../atom"
 
 export const EndNode = props => {
   return (
     <div>
-      <NextNode {...props} />
+      <NodeCommon
+        {...props}
+        contentRender={() => "流程结束"}
+      />
     </div>
   )
 }

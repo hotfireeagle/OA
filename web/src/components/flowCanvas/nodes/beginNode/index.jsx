@@ -21,7 +21,6 @@ export const BeginNode = props => {
     <>
       <NodeCommon
         {...props}
-        title="发起人"
         contentRender={() => "所有人"}
         onClick={() => setShowDrawer(true)}
       />

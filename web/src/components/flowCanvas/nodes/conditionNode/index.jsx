@@ -7,6 +7,7 @@ import { useLayoutEffect, useState } from "react"
 import { uuid2id } from "@/utils"
 
 const defaultPos = 110
+
 export const SwitchNode = props => {
   const [left, setLeft] = useState(defaultPos)
   const [right, setRight] = useState(defaultPos)

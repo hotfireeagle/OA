@@ -8,3 +8,10 @@ export const componentColorMap = {
   [flowNodeType.condition]: "#fa8c16",
   [flowNodeType.caseBranch]: "#fa8c16",
 }
+
+export const componentNameMap = {
+  [flowNodeType.begin]: "发起人",
+  [flowNodeType.end]: "结束",
+  [flowNodeType.approve]: "审批人",
+  [flowNodeType.cc]: "抄送人",
+}

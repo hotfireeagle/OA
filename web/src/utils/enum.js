@@ -13,7 +13,7 @@ export const nodes = [
   {
     type: flowNodeType.begin,
     cn: "发起人",
-    addable: true,
+    addable: false,
   },
   {
     type: flowNodeType.condition,
@@ -45,9 +45,11 @@ export const nodes = [
 export const initCaseSchema = [
   {
     id: uuidv4(),
+    nodeType: flowNodeType.caseBranch,
   },
   {
     id: uuidv4(),
+    nodeType: flowNodeType.caseBranch,
   },
 ]
 
@@ -59,33 +61,7 @@ export const initFlowData = {
   },
   next: {
     id: uuidv4(),
-    nodeType: flowNodeType.condition, // switch条件节点
-    attr: {
-      caseSchema: [
-        {
-          nodeType: flowNodeType.caseBranch,
-          id: uuidv4(),
-          attr: {
-            // 在条件配置数据里面可以是各种条件
-          },
-          // next: {
-          //   id: uuidv4(),
-          //   nodeType: flowNodeType.begin,
-          //   attr: {},
-          //   next: {
-          //     id: uuidv4(),
-          //     nodeType: flowNodeType.begin,
-          //     attr: {},
-          //   },
-          // },
-        }, // case分支1
-        {
-          nodeType: flowNodeType.caseBranch,
-          id: uuidv4(),
-          attr: {},
-        }, // 固定认为最后一个case分支就是default分支
-      ], // 所有条件列表，逐个逐个进行判断
-    }
+    nodeType: flowNodeType.end,
   }
 }
 

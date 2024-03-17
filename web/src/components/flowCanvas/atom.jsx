@@ -10,8 +10,10 @@ import styles from "./atom.less"
 import { Tooltip } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { v4 as uuidv4 } from "uuid"
-import { componentColorMap } from "./enum"
+import { componentColorMap, componentNameMap } from "./enum"
+import { useState, useEffect } from "react"
 
+// 根据节点类型返回其具体对应的节点
 export const FlowAtom = props => {
   if (!props) {
     return null
@@ -34,11 +36,19 @@ export const FlowAtom = props => {
   }
 }
 
+/**
+ * 渲染节点的下一个节点以及新增节点的图标
+ * @param {*} props 
+ * @returns 
+ */
 export const NextNode = props => {
   const { flowData, updateFlow } = useFlowStore()
+  const [openStatus, setOpenStatus] = useState(false)
 
   if (props.nodeType === flowNodeType.end) {
-    return null
+    return (
+      <div style={{ marginBottom: 90 }} />
+    )
   }
 
   const appendNode = newNodeType => {
@@ -114,6 +124,21 @@ export const NextNode = props => {
     )
   }
 
+  const showTooltip = event => {
+    event.stopPropagation()
+    setOpenStatus(true)
+  }
+
+  useEffect(() => {
+    const clickCb = () => {
+      setOpenStatus(false)
+    }
+  
+    document.addEventListener("click", clickCb)
+
+    return () => document.removeEventListener("click", clickCb)
+  }, [])
+
   return (
     <>
       <div className={styles.newContainer}>
@@ -121,10 +146,10 @@ export const NextNode = props => {
         <Tooltip
           color="#fff"
           title={returnNodes()}
-          trigger="click"
+          open={openStatus}
           placement="right"
         >
-          <div className={styles.roundCls}>
+          <div className={styles.roundCls} onClick={showTooltip}>
             <span className={styles.plusCls}>+</span>
           </div>
         </Tooltip>
@@ -172,7 +197,7 @@ export const NodeCommon = props => {
               <div className={styles.withArrowInNodeHeader}></div>
             ) : null
           }
-          <span>{props.title}</span>
+          <span>{props.title || componentNameMap[props.nodeType]}</span>
         </div>
         <div className={styles.nodeBody}>
           {props.contentRender()}
