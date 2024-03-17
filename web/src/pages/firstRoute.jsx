@@ -15,6 +15,14 @@ const FirstRoute = () => {
     history.replace("/user/login")
   }
 
+  // 判断是不是一个菜单组
+  const checkIsMenuGroup = configItem => {
+    if (configItem?.routes?.length) {
+      return true
+    }
+    return false
+  }
+
   // 判断是不是关于菜单的配置项
   const checkIsMenu = configData => {
     if (!configData) {
@@ -60,6 +68,11 @@ const FirstRoute = () => {
           answer = data.path
           return
         }
+      }
+
+      // 是个菜单组，如果连菜单组的权限都没有的话，那么就没必要在遍历子菜单了
+      if (checkIsMenuGroup(data) && !userAuths.includes(data.access)) {
+        return
       }
 
       if (data.routes && data.routes.length) {

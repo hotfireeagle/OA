@@ -12,6 +12,7 @@ export default [
         "path": "/flowModule/list",
         "name": "审批列表",
         "component": "./flowModule/list/index",
+        // "access": "TODO:",
       },
     ],
 	},
