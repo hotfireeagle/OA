@@ -5,7 +5,7 @@ import {
   SwitchNode,
   EndNode,
 } from "@/components/flowCanvas/nodes"
-import { flowNodeType, nodes, initCaseSchema } from "@/utils/enum"
+import { flowNodeType, nodes } from "@/utils/enum"
 import styles from "./atom.less"
 import { Tooltip } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
@@ -15,7 +15,7 @@ import { useState, useEffect } from "react"
 
 // 根据节点类型返回其具体对应的节点
 export const FlowAtom = props => {
-  if (!props) {
+  if (!("nodeType" in props)) {
     return null
   }
 
@@ -60,7 +60,16 @@ export const NextNode = props => {
 
     if (newNodeType === flowNodeType.condition) {
       newNext.attr = {
-        caseSchema: [...initCaseSchema],
+        caseSchema: [
+          {
+            id: uuidv4(),
+            nodeType: flowNodeType.caseBranch,
+          },
+          {
+            id: uuidv4(),
+            nodeType: flowNodeType.caseBranch,
+          },
+        ],
       }
     }
 

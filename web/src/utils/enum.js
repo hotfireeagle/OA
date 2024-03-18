@@ -42,17 +42,6 @@ export const nodes = [
   },
 ]
 
-export const initCaseSchema = [
-  {
-    id: uuidv4(),
-    nodeType: flowNodeType.caseBranch,
-  },
-  {
-    id: uuidv4(),
-    nodeType: flowNodeType.caseBranch,
-  },
-]
-
 export const account_status_map = {
   "TODO:1": "正常",
   "TODO:2": "被禁用",

@@ -12,6 +12,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 40px;
+  position: relative;
   .left {
     display: flex;
     align-items: center;
@@ -29,6 +30,10 @@
   .center {
     display: flex;
     align-items: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     .stepCls {
       cursor: pointer;
       color: #909399;
