@@ -53,18 +53,6 @@ export const initCaseSchema = [
   },
 ]
 
-export const initFlowData = {
-  id: uuidv4(),
-  nodeType: flowNodeType.begin,
-  attr: {
-    // 属性配置的地方
-  },
-  next: {
-    id: uuidv4(),
-    nodeType: flowNodeType.end,
-  }
-}
-
 export const account_status_map = {
   "TODO:1": "正常",
   "TODO:2": "被禁用",

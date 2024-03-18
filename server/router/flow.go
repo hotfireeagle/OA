@@ -50,11 +50,19 @@ func selectFlowListRoute(c *gin.Context) {
 	okRes(c, list)
 }
 
-func updateFlowRoute(c *gin.Context) {
+func updateFlowBasicRoute(c *gin.Context) {
 	flow := new(model.Flow)
 	if !validate(c, flow) {
 		return
 	}
 
 	errok(flow.UpdateFlowBasic(), c)
+}
+
+func updateFlowCofigRoute(c *gin.Context) {
+	flow := new(model.Flow)
+	if !validate(c, flow) {
+		return
+	}
+	errok(flow.UpdateFlowConfig(), c)
 }

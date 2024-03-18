@@ -21,8 +21,9 @@ func InitRoute(g *gin.Engine) {
 	flowGroup := bmsGroup.Group("/flow")
 	flowGroup.POST("/insert", insertFlowRoute)
 	flowGroup.POST("/list", selectFlowListRoute)
-	flowGroup.POST("/updateBasic", updateFlowRoute)
+	flowGroup.POST("/updateBasic", updateFlowBasicRoute)
 	flowGroup.POST("/detail/:id", findFlowDetailRoute)
+	flowGroup.POST("/updateConfig", updateFlowCofigRoute)
 
 	permissionGroup := bmsGroup.Group("/permission")
 	permissionGroup.POST("/apiTree", getPermissonTree)

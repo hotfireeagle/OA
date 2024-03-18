@@ -15,8 +15,8 @@ const FlowModuleDetail = () => {
   const [loadingDetail, setLoadingDetail] = useState(false) // 是否加载详情数据中
 
   const steps = [
-    { stepName: "②审批表单", key: saveKeys.form },
-    { stepName: "③审批流程", key: saveKeys.config },
+    { stepName: "审批流程", key: saveKeys.config },
+    { stepName: "审批表单", key: saveKeys.form },
   ]
 
   const eleList = [
@@ -50,6 +50,7 @@ const FlowModuleDetail = () => {
             <Button
               type="primary"
               icon={<LeftSquareOutlined />}
+              onClick={() => history.back()}
             >
               回到列表
             </Button>
@@ -69,13 +70,6 @@ const FlowModuleDetail = () => {
             }
           </div>
           <div className={styles.right}>
-            {/* <Button
-              className={styles.mr10}
-              icon={<SendOutlined />}
-              type="primary"
-            >
-              发布
-            </Button> */}
             <Button
               icon={<FileDoneOutlined />}
               type="primary"
