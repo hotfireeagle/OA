@@ -38,42 +38,14 @@ create table role_permission (
   primary key (id)
 );
 
-
-# 流程组表
-create table flow_group (
-  id int auto_increment,
-  group_name varchar(20) not null unique,
-  create_time datetime,
-  delete_time datetime,
-  primary key (id)
-);
-
 # 流程表
 create table flow (
   id varchar(36) unique,
-  flow_basic_id varchar(36) unique,
-  flow_rule_id varchar(36),
+  name varchar(50) not null,
+  flow_config MEDIUMTEXT,
+  flow_form MEDIUMTEXT,
   create_time datetime,
   delete_time datetime,
-  primary key (id)
-);
-
-# flow基本信息表
-create table flow_basic (
-  id varchar(36) unique,
-  flow_name varchar(20) not null unique,
-  group_id int not null,
-  msg_notify_way int not null,
-  msg_notify_title varchar(20) not null,
-  extra_desc varchar(100),
-  create_time datetime,
-  delete_time datetime,
-  primary key (id)
-);
-
-# flow规则配置表
-create table flow_rule (
-  id varchar(36) unique,
-  rule_data text,
+  create_uid varchar(36) comment '创建者',
   primary key (id)
 );

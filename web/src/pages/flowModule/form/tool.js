@@ -19,7 +19,6 @@ class PubSub {
 }
 
 export const saveKeys = {
-  basic: "basic",
   form: "form",
   config: "config",
 }

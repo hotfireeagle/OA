@@ -17,7 +17,7 @@ func insertRoleRoute(c *gin.Context) {
 	}
 
 	role.SetCreateTime()
-	role.SetCreateUID(c.GetString("uid"))
+	role.SetCreateUID(c)
 
 	errok(role.Insert(), c)
 }

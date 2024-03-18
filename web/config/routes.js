@@ -23,13 +23,6 @@ export default [
     "hideInMenu": true,
     "layout": false
   },
-  {
-    "path": "/flowModule/new",
-    "name": "新增审批",
-    "component": "./flowModule/form/index",
-    "hideInMenu": true,
-    "layout": false
-  },
 	{
 		"path": "/permission",
 		"name": "权限管理",

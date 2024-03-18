@@ -4,6 +4,8 @@ import (
 	"database/sql/driver"
 	"errors"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type ResponseCode int
@@ -14,6 +16,9 @@ const (
 	NeedLogin
 	UnAuth
 )
+
+const defaultLimit = 10
+const defaultPage = 1
 
 type Response struct {
 	Code ResponseCode `json:"code"`
@@ -88,14 +93,20 @@ func (b *BaseColumn) SetDeleteTime() {
 	}
 }
 
-func (b *BaseColumn) SetCreateUID(uid string) {
-	b.CreateUID = uid
+func (b *BaseColumn) SetCreateUID(c *gin.Context) {
+	b.CreateUID = c.GetString("uid")
 }
 
-// TODO: 再对PaginationParam进行反序列化时，新增一下对Current和PageSize的默认值处理？
 type PaginationParam struct {
 	Current  int `json:"current"`
 	PageSize int `json:"pageSize"`
+}
+
+func (p PaginationParam) Limit() int {
+	if p.PageSize == 0 {
+		return defaultLimit
+	}
+	return p.PageSize
 }
 
 func (p PaginationParam) Offset() int {
@@ -104,12 +115,12 @@ func (p PaginationParam) Offset() int {
 		ps int
 	)
 	if p.Current == 0 {
-		c = 1
+		c = defaultPage
 	} else {
 		c = p.Current
 	}
 	if p.PageSize == 0 {
-		ps = 10
+		ps = defaultLimit
 	} else {
 		ps = p.PageSize
 	}

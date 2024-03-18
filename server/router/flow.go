@@ -23,3 +23,38 @@ func findFlowDetailRoute(c *gin.Context) {
 
 	okRes(c, flow)
 }
+
+func insertFlowRoute(c *gin.Context) {
+	flow := new(model.Flow)
+	if !validate(c, flow) {
+		return
+	}
+	flow.SetCreateUID(c)
+	errok(flow.Insert(), c)
+}
+
+func selectFlowListRoute(c *gin.Context) {
+	data := new(model.QueryFlowData)
+	if !validate(c, data) {
+		return
+	}
+
+	flow := new(model.Flow)
+	list, err := flow.Pagaination(data)
+
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+
+	okRes(c, list)
+}
+
+func updateFlowRoute(c *gin.Context) {
+	flow := new(model.Flow)
+	if !validate(c, flow) {
+		return
+	}
+
+	errok(flow.UpdateFlowBasic(), c)
+}
