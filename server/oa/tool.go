@@ -1,6 +1,16 @@
 package oa
 
-import "errors"
+import (
+	"encoding/json"
+	"errors"
+)
+
+func Parse(data string) (*OANode, error) {
+	result := new(OANode)
+	err := json.Unmarshal([]byte(data), result)
+
+	return result, err
+}
 
 // 验证流程配置数据是否正确：
 // 所有的支路中最后一个节点必须是结束节点

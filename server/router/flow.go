@@ -2,6 +2,7 @@ package router
 
 import (
 	"oa/model"
+	"oa/oa"
 	"oa/util"
 
 	"github.com/gin-gonic/gin"
@@ -62,6 +63,17 @@ func updateFlowBasicRoute(c *gin.Context) {
 func updateFlowCofigRoute(c *gin.Context) {
 	flow := new(model.Flow)
 	if !validate(c, flow) {
+		return
+	}
+	rootNode, err := oa.Parse(flow.FlowConfig)
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+	// 校验配置数据是否合法
+	err = oa.Validate(rootNode)
+	if err != nil {
+		errRes(c, err)
 		return
 	}
 	errok(flow.UpdateFlowConfig(), c)

@@ -3,12 +3,12 @@ package oa
 type FlowNodeType int
 
 const (
-	Begin      FlowNodeType = 1 // the begin node
-	Condition                   // the condition node
-	Approve                     // the approve node
-	CC                          // the make a copy for node
-	CaseBranch                  // the case branch node
-	End                         // the end node
+	Begin      FlowNodeType = iota + 1 // the begin node
+	Condition                          // the condition node
+	Approve                            // the approve node
+	CC                                 // the make a copy for node
+	CaseBranch                         // the case branch node
+	End        FlowNodeType = 999      // the end node
 )
 
 type OANode struct {

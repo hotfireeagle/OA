@@ -1,5 +1,3 @@
-import { v4 as uuidv4 } from "uuid"
-
 export const flowNodeType = {
   begin: 1, // 发起人节点
   condition: 2, // 条件节点
