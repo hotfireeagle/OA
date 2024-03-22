@@ -49,13 +49,17 @@ func updateBmsUserRoute(c *gin.Context) {
 
 // 后台用户进行登录的路由
 func bmsUserLoginRoute(c *gin.Context) {
-	postUser := new(model.BmsUser)
+	postUser := new(model.BmsUserLoginBody)
 	if !validate(c, postUser) {
 		return
 	}
 
+	u := model.BmsUser{
+		Email: postUser.Email,
+	}
+
 	// 根据用户邮箱查找数据库用户
-	dbUser, err := postUser.SearchByEmail()
+	dbUser, err := u.SearchByEmail()
 	if err != nil {
 		errRes(c, err)
 		return
@@ -83,7 +87,6 @@ func fetchUserDetailRoute(c *gin.Context) {
 		errRes(c, err)
 		return
 	}
-	userDetail.Password = ""
 	okRes(c, userDetail)
 }
 
@@ -93,10 +96,20 @@ func userListRoute(c *gin.Context) {
 		return
 	}
 	u := &model.BmsUser{}
-	a, e := u.UserList(q)
+	a, e := u.Pagination(q)
 	if e != nil {
 		errRes(c, e)
 		return
 	}
 	okRes(c, a)
+}
+
+func allUserRoute(c *gin.Context) {
+	u := new(model.BmsUser)
+	answer, err := u.All()
+	if err != nil {
+		errRes(c, err)
+		return
+	}
+	okRes(c, answer)
 }

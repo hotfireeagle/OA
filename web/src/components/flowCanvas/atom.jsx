@@ -171,10 +171,11 @@ export const NextNode = props => {
 export const NodeCommon = props => {
   const { flowData, updateFlow } = useFlowStore()
 
-  const clickHandler = () => {
-    // if (props.onClick) {
-    //   props.onClick()
-    // }
+  const clickHandler = event => {
+    event.stopPropagation()
+    if (props.onClick) {
+      props.onClick()
+    }
   }
 
   // 判断是否显示指向节点的箭头（上一个节点指向下一个节点的）

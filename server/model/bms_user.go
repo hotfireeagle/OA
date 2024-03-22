@@ -10,10 +10,17 @@ import (
 type BmsUser struct {
 	UserId     string     `json:"userId" gorm:"column:user_id"`
 	Email      string     `json:"email" gorm:"column:email" binding:"required"`
-	Password   string     `json:"password,omitempty" gorm:"column:password"`
+	Password   string     `json:"-" gorm:"column:password"`
 	RoleId     int        `json:"roleId" gorm:"column:role_id"`
 	CreateTime CustomTime `json:"createTime" gorm:"column:create_time"`
 	DeleteTime CustomTime `json:"deleteTime" gorm:"column:delete_time"`
+}
+
+const AllBmsUserId string = "thisisallbmmsuseridandjustfornothing" // TODO:
+
+type BmsUserLoginBody struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type BmsUserListItem struct {
@@ -101,7 +108,7 @@ func (b BmsUser) SearchByEmail() (*BmsUser, error) {
 	return u, DB.Where("email = ?", b.Email).First(u).Error
 }
 
-func (b BmsUser) UserList(q *BmsUserQueryParam) (*PaginationResponse, error) {
+func (b BmsUser) Pagination(q *BmsUserQueryParam) (*PaginationResponse, error) {
 	u := new([]BmsUserListItem)
 	var total int64
 
@@ -121,4 +128,10 @@ func (b BmsUser) UserList(q *BmsUserQueryParam) (*PaginationResponse, error) {
 	// db = db.Where("role_id IN (?)", subQuery)
 	err = db.Limit(q.PageSize).Offset(q.Offset()).Find(u).Error
 	return GeneratePaginationResponse(u, q.Current, q.PageSize, total), err
+}
+
+func (b BmsUser) All() (*[]BmsUser, error) {
+	result := new([]BmsUser)
+
+	return result, DB.Find(result).Error
 }

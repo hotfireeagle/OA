@@ -9,11 +9,30 @@ export const BeginNode = props => {
 
   const formList = [
     {
-      label: "设置发起人",
-      type: "custom",
-      key: "whoCanBegin",
-      required: true,
-      render: () => "shit",
+      label: "发起人",
+      type: "select",
+      key: "user",
+      remote: {
+        api: "/user/all",
+        nameKey: "email",
+        valueKey: "userId",
+      },
+      extraAtomProps: {
+        mode: "multiple",
+      },
+    },
+    {
+      label: "发起角色",
+      type: "select",
+      key: "role",
+      remote: {
+        api: "/role/listAll",
+        nameKey: "name",
+        valueKey: "id",
+      },
+      extraAtomProps: {
+        mode: "multiple",
+      },
     }
   ]
 
