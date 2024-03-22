@@ -127,3 +127,19 @@ func (p PaginationParam) Offset() int {
 
 	return (c - 1) * ps
 }
+
+type PaginationResponse struct {
+	Current  int         `json:"current"`
+	PageSize int         `json:"pageSize"`
+	Total    int64       `json:"total"`
+	Records  interface{} `json:"records"`
+}
+
+func GeneratePaginationResponse(records interface{}, current int, pageSize int, total int64) *PaginationResponse {
+	return &PaginationResponse{
+		Current:  current,
+		PageSize: pageSize,
+		Total:    total,
+		Records:  records,
+	}
+}

@@ -101,19 +101,24 @@ func (b BmsUser) SearchByEmail() (*BmsUser, error) {
 	return u, DB.Where("email = ?", b.Email).First(u).Error
 }
 
-func (b BmsUser) UserList(q *BmsUserQueryParam) (*[]BmsUserListItem, error) {
+func (b BmsUser) UserList(q *BmsUserQueryParam) (*PaginationResponse, error) {
 	u := new([]BmsUserListItem)
+	var total int64
 
 	db := DB.Model(&BmsUser{})
 	if q.Email != "" {
-		db = db.Where("email = ?", q.Email)
+		db = db.Where("email like ?", "%"+q.Email+"%")
 	}
 	if q.RoleId != 0 {
 		db = db.Where("role_id = ?", q.RoleId)
 	}
 	db = db.Joins("LEFT JOIN role ON bms_users.role_id = role.id").Where("role.is_admin_role = ?", 0).Select("bms_users.*, role.name as role_name")
+	err := db.Count(&total).Error
+	if err != nil {
+		return nil, err
+	}
 	// subQuery := DB.Model(&Role{}).Where("is_admin_role = ?", 0).Select("id")
 	// db = db.Where("role_id IN (?)", subQuery)
-	err := db.Limit(q.PageSize).Offset(q.Offset()).Find(u).Error
-	return u, err
+	err = db.Limit(q.PageSize).Offset(q.Offset()).Find(u).Error
+	return GeneratePaginationResponse(u, q.Current, q.PageSize, total), err
 }
