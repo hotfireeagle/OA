@@ -41,8 +41,12 @@ func fetchRoleListRoute(c *gin.Context) {
 
 // 获取所有的角色
 func fetchAllRoleRoute(c *gin.Context) {
+	query := new(model.QueryAllRoleParam)
+	if !validate(c, query) {
+		return
+	}
 	r := new(model.Role)
-	l, e := r.FindAllRole()
+	l, e := r.FindAllRole(query)
 	if e != nil {
 		errRes(c, e)
 		return

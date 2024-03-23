@@ -105,8 +105,13 @@ func userListRoute(c *gin.Context) {
 }
 
 func allUserRoute(c *gin.Context) {
+	query := new(model.QueryAllUserParam)
+	if !validate(c, query) {
+		return
+	}
+
 	u := new(model.BmsUser)
-	answer, err := u.All()
+	answer, err := u.All(query)
 	if err != nil {
 		errRes(c, err)
 		return

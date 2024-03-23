@@ -16,7 +16,7 @@ type BmsUser struct {
 	DeleteTime CustomTime `json:"deleteTime" gorm:"column:delete_time"`
 }
 
-const AllBmsUserId string = "thisisallbmmsuseridandjustfornothing" // TODO:
+const AllBmsUserId string = "thisisallbmmsuseridandjustformark"
 
 type BmsUserLoginBody struct {
 	Email    string `json:"email" binding:"required"`
@@ -34,6 +34,10 @@ type BmsUserQueryParam struct {
 	PaginationParam
 }
 
+type QueryAllUserParam struct {
+	NeedContainAll bool `json:"needContainAll"`
+}
+
 type UserMeta struct {
 	*BmsUser
 	Menus []string `json:"menus"`
@@ -46,6 +50,7 @@ func (b BmsUser) TableName() string {
 
 func (b *BmsUser) Insert() error {
 	b.UserId = uuid.NewString()
+	b.CreateTime = CustomTime{Time: time.Now()}
 	return DB.Create(b).Error
 }
 
@@ -130,8 +135,20 @@ func (b BmsUser) Pagination(q *BmsUserQueryParam) (*PaginationResponse, error) {
 	return GeneratePaginationResponse(u, q.Current, q.PageSize, total), err
 }
 
-func (b BmsUser) All() (*[]BmsUser, error) {
-	result := new([]BmsUser)
+func (b BmsUser) All(query *QueryAllUserParam) (*[]BmsUser, error) {
+	result := make([]BmsUser, 0)
+	err := DB.Order("create_time asc").Find(&result).Error
+	if err != nil {
+		return nil, err
+	}
 
-	return result, DB.Find(result).Error
+	if query.NeedContainAll == true {
+		result = append(result, BmsUser{})
+		copy(result[1:], result)
+		result[0] = BmsUser{
+			UserId: AllBmsUserId,
+			Email:  "所有用户",
+		}
+	}
+	return &result, nil
 }

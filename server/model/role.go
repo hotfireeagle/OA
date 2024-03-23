@@ -16,6 +16,10 @@ type RoleListSearchParam struct {
 	PaginationParam
 }
 
+type QueryAllRoleParam struct {
+	NeedContainAll bool `json:"needContainAll"`
+}
+
 type Role struct {
 	Id               int    `json:"id" gorm:"column:id"`
 	Name             string `json:"name" gorm:"column:name" binding:"required"`
@@ -23,6 +27,8 @@ type Role struct {
 	HasSetPermission int    `json:"hasSetPermission" gorm:"column:has_set_permission"`
 	BaseColumn
 }
+
+const AllRoleId int = 999999999
 
 type RoleDetail struct {
 	Apis  *[]string `json:"apis"`
@@ -159,7 +165,17 @@ func FindRole(id int) (*Role, error) {
 	return r, DB.Where("id = ?", id).Find(r).Error
 }
 
-func (r *Role) FindAllRole() (*[]Role, error) {
-	roleList := new([]Role)
-	return roleList, DB.Where("is_admin_role = ?", 0).Find(roleList).Error
+func (r *Role) FindAllRole(query *QueryAllRoleParam) (*[]Role, error) {
+	roleList := make([]Role, 0)
+	err := DB.Where("is_admin_role = ?", 0).Find(&roleList).Error
+	if err != nil {
+		return nil, err
+	}
+	roleList = append(roleList, Role{})
+	copy(roleList[1:], roleList)
+	roleList[0] = Role{
+		Id:   AllRoleId,
+		Name: "所有角色",
+	}
+	return &roleList, nil
 }

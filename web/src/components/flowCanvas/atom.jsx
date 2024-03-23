@@ -208,8 +208,8 @@ export const NodeCommon = props => {
   }
 
   return (
-    <div onClick={clickHandler} className={styles.nodeWrapper}>
-      <div className={styles.nodeContainer}>
+    <div className={styles.nodeWrapper}>
+      <div onClick={clickHandler} className={styles.nodeContainer}>
         <div
           className={styles.nodeHeader}
           style={{

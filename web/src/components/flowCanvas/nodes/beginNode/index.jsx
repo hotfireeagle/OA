@@ -14,6 +14,7 @@ export const BeginNode = props => {
       key: "user",
       remote: {
         api: "/user/all",
+        requestData: { needContainAll: true },
         nameKey: "email",
         valueKey: "userId",
       },
@@ -27,6 +28,7 @@ export const BeginNode = props => {
       key: "role",
       remote: {
         api: "/role/listAll",
+        requestData: { needContainAll: true },
         nameKey: "name",
         valueKey: "id",
       },
