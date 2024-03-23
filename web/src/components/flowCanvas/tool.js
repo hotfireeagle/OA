@@ -47,6 +47,7 @@ export const findTreeNode = (treeRoot, targetId) => {
  */
 export const findSomeNodeParentNode = (rootNode, targetNode) => {
   let answer = null
+  const isCaseBranchTarget = targetNode.nodeType == flowNodeType.caseBranch
 
   const find = node => {
     if (answer) {
@@ -58,9 +59,21 @@ export const findSomeNodeParentNode = (rootNode, targetNode) => {
     }
 
     const { next, nodeType, attr } = node
-    if (next && next.id == targetNode.id) {
-      answer = node
-      return
+
+    if (isCaseBranchTarget) {
+      if (nodeType === flowNodeType.condition) {
+        const cases = attr?.caseSchema || []
+        const idx = cases.findIndex(obj => obj.id == targetNode.id)
+        if (idx !== -1) {
+          answer = node
+          return
+        }
+      }
+    } else {
+      if (next && next.id == targetNode.id) {
+        answer = node
+        return
+      }
     }
 
     find(next)

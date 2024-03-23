@@ -7,7 +7,7 @@ import {
 } from "@/components/flowCanvas/nodes"
 import { flowNodeType, nodes } from "@/utils/enum"
 import styles from "./atom.less"
-import { Tooltip } from "antd"
+import { Tooltip, message } from "antd"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { v4 as uuidv4 } from "uuid"
 import { componentColorMap, componentNameMap } from "./enum"
@@ -188,8 +188,22 @@ export const NodeCommon = props => {
   const deleteNodeHandler = () => {
     const parentNode = findSomeNodeParentNode(flowData, props)
     if (parentNode) {
-      parentNode.next = props.next
-      updateFlow(flowData)
+      if (props.nodeType == flowNodeType.caseBranch) {
+        if (parentNode?.attr?.caseSchema?.length <= 2) {
+          message.warning("条件节点必须至少包含有两个分支")
+          return
+        }
+        const idx = parentNode.attr.caseSchema.findIndex(obj => {
+          return obj.id == props.id
+        })
+        if (idx != -1) {
+          parentNode.attr.caseSchema.splice(idx, 1)
+          updateFlow(flowData)
+        }
+      } else {
+        parentNode.next = props.next
+        updateFlow(flowData)
+      }
     }
   }
 
