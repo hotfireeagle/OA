@@ -1,4 +1,4 @@
-import { NodeCommon } from "../../atom"
+import { NodeCommon } from "../../base"
 
 export const EndNode = props => {
   return (

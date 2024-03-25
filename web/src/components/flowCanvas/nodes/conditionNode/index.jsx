@@ -1,5 +1,6 @@
-import { NextNode, NodeCommon } from "../../atom"
-import styles from "../../atom.less"
+import { NodeCommon } from "../../base"
+import { NextNode } from "../../nextNode"
+import styles from "../../style.less"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
 import { findTreeNode, appendCaseToSwitchNode } from "../../tool"
 import { CloseSquareOutlined } from "@ant-design/icons"
