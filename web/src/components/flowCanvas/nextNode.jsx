@@ -5,6 +5,8 @@ import { v4 as uuidv4 } from "uuid"
 import { useState, useEffect } from "react"
 import { findTreeNode } from "./tool"
 import { nodes } from "@/utils/enum"
+import { flowNodeType } from "@/utils/enum"
+import { FlowAtom } from "./atom"
 
 /**
  * 渲染节点的下一个节点以及新增节点的图标

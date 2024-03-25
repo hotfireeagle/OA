@@ -4,9 +4,10 @@ import { message, Drawer, Form, Button } from "antd"
 import { NextNode } from "./nextNode"
 import styles from "./style.less"
 import { useFlowStore } from "@/pages/flowModule/form/components/flow/store"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { FormList } from "buerui"
 import PropTypes from "prop-types"
+import { flowNodeType } from "@/utils/enum"
 
 /**
  * 所有节点都会使用它来进行渲染
@@ -63,7 +64,7 @@ export const NodeCommon = props => {
       ...(node.attr || {}),
       ...values,
     }
-    updateFlow(flowData) // TODO: 测试配置数据能不能正常到达attr里面
+    updateFlow(flowData)
     closeDrawerHandler()
   }
 
@@ -75,12 +76,15 @@ export const NodeCommon = props => {
   const renderSaveAndCloseArea = () => {
     return (
       <div className={styles.saveAndCloseContainer}>
-        <div className={styles.flexg} />
-        <Button onClick={saveHandler} type="primary" className={styles.saveCls}>保存</Button>
+        <Button onClick={saveHandler} type="primary" className={styles.saveCls}>确定</Button>
         <Button onClick={closeDrawerHandler} className={styles.cancelCls}>取消</Button>
       </div>
     )
   }
+
+  useEffect(() => {
+    formInstance.setFieldsValue(props.attr || {})
+  }, [props.attr])
 
   return (
     <>
@@ -123,8 +127,9 @@ export const NodeCommon = props => {
             placement="right"
             onClose={() => setShowDrawer(false)}
             open={showDrawer}
-            closeIcon={renderSaveAndCloseArea()}
+            closeIcon={null}
             maskClosable={false}
+            footer={renderSaveAndCloseArea()}
           >
             <Form form={formInstance} layout="vertical">
               <FormList
