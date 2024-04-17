@@ -10,9 +10,9 @@ export default [
       },
       {
         "path": "/flowModule/list",
-        "name": "审批列表",
+        "name": "审批配置",
         "component": "./flowModule/list/index",
-        // "access": "TODO:",
+        "access": "审批配置",
       },
     ],
 	},
