@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/hotfireeagle/permissionbus"
+	"gorm.io/gorm"
 )
 
 func insertBmsUserRoute(c *gin.Context) {
@@ -61,7 +62,11 @@ func bmsUserLoginRoute(c *gin.Context) {
 	// 根据用户邮箱查找数据库用户
 	dbUser, err := u.SearchByEmail()
 	if err != nil {
-		errRes(c, err)
+		errAfterHandle := err
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			errAfterHandle = errors.New("账号不存在")
+		}
+		errRes(c, errAfterHandle)
 		return
 	}
 
