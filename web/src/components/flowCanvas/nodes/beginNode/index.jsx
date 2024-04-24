@@ -8,7 +8,7 @@ export const BeginNode = props => {
 
   const formList = [
     {
-      label: "发起人",
+      label: "按人",
       type: "select",
       key: "user",
       oplist: allSystemUserList,
@@ -19,7 +19,7 @@ export const BeginNode = props => {
       },
     },
     {
-      label: "发起角色",
+      label: "按角色",
       type: "select",
       key: "role",
       oplist: roleList,

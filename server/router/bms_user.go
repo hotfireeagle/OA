@@ -64,14 +64,14 @@ func bmsUserLoginRoute(c *gin.Context) {
 	if err != nil {
 		errAfterHandle := err
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			errAfterHandle = errors.New("账号不存在")
+			errAfterHandle = errors.New("账号不存在或者密码错误")
 		}
 		errRes(c, errAfterHandle)
 		return
 	}
 
 	if !util.Sha256Check(postUser.Password, dbUser.Password) {
-		errRes(c, errors.New("密码错误"))
+		errRes(c, errors.New("账号不存在或者密码错误"))
 		return
 	}
 
